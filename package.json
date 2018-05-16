@@ -4,12 +4,23 @@
   "description": "This server allows all of our web apps to access MongoDB through Ajax requests.",
   "main": "nodeServer.js",
   "scripts": {
-    "test": "npm start"
+    "start": "nodemon ./nodeServer.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/OSU-Sustainability-Office/shared-node-server/"
+    "url": "git+https://github.com/OSU-Sustainability-Office/shared-node-server.git"
   },
   "author": "Jack Woods - OSU Sustainability Office",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OSU-Sustainability-Office/shared-node-server/issues"
+  },
+  "homepage": "https://github.com/OSU-Sustainability-Office/shared-node-server#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "mongodb": "^2.2.33",
+    "mongoose": "^5.1.1",
+    "morgan": "^1.9.0"
+  }
 }
