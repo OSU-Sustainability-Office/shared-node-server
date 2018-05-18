@@ -29,12 +29,13 @@ router.post('/upload',function(req, res){
 			// Search the user's data for today's date.
       		// The user can only upload a maximum of 1 carbon footprint per day.
 			if (rslt.length > 0) {
-				var userObject = results[0];
+				var userObject = rslt[0];
 				var update = false;
+				console.log(dataObject);
 
 				for (var i = 0; i < userObject.data.length; i++) {
 					//if date exists in the users list
-					if (userObject.data[i].date === dataObject.date[0].date) {
+					if (userObject.data[i].date === dataObject.data[0].date) {
 						update = true;
 						userObject.data[i] = dataObject.data[0]; //replace it
 						console.log("Replace data.")
@@ -78,7 +79,7 @@ router.post('/download',function(req, res) {
 		function(err,rslt) {
 			//if the user exists in the DB
 			if (rslt.length > 0) { 
-				var userObject = results[0];
+				var userObject = rslt[0];
 
 				//send success status
 				res.status("200");
