@@ -1,38 +1,46 @@
-var mongoose = require('mongoose'),
-    config = require('./config.js');
+const mysql = require('mysql')
+require('dotenv').config()
 
 var state = {
-  map: null,
-  carbon: null
+  db: null
 }
 
-exports.connect = function(done) {
-  if (state.db) return done()
-    state.carbon = mongoose.createConnection(config.db.carbonData);
-    state.map = mongoose.createConnection(config.db.mapData);
-    done();
+exports.connect = function (done) {
+  if (state.db) { return done() }
+  state.db = mysql.createConnection({
+    host: process.env.RDS_HOSTNAME,
+    user: process.env.RDS_USERNAME,
+    password: process.env.RDS_PASSWORD,
+    port: process.env.RDS_PORT,
+    database: process.env.RDS_DATABASE
+  })
+  state.db.connect(function (err) {
+    if (err) {
+      console.error('Database connection failed: ' + err.stack)
+      return
+    }
+    console.log('Connected to Database')
+    done()
+  })
 }
 
-exports.get = function(s) {
-  if (s === "map") {
-    return state.map;
-  }
-  else if (s === "carbon") {
-    return state.carbon;
-  }
-}
-
-exports.close = function(done) {
-  if (state.map) {
-    state.map.close(function(err, result) {
-      state.map = null
-      done(err)
+exports.query = function (sql, args) {
+  return new Promise((resolve, reject) => {
+    state.db.query(sql, args, (err, rows) => {
+      if (err) { return reject(err) }
+      resolve(rows)
     })
-  }
-  if (state.carbon) {
-    state.carbon.close(function(err, result) {
-      state.carbon = null
-      done(err)
+  })
+}
+exports.get = function () {
+  return state.db
+}
+
+exports.close = function () {
+  return new Promise((resolve, reject) => {
+    state.db.end(err => {
+      if (err) { return reject(err) }
+      resolve()
     })
-  }
+  })
 }
