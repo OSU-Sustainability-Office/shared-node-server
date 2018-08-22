@@ -1,101 +1,95 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../db');
-var ObjectId = require('mongodb').ObjectId;
 
 router.use(function timeLog(req,res,next){
 	console.log('Time: ', Date.now());
 	next();
 })
 
-/*======================================
-			DATA COLLECTION
-========================================
-Collects POST data from users in JSON format.
-Then queries the database to prevent duplicates
-and stores data
-*/
-router.post('/upload',function(req, res){
-	console.log(req.body);
-	var dataObject = req.body;
+// Download User Data
+router.post('/carbonCalculator/download', function (req, res) {
+  // Get user data from client
+  let dataObject = req.body;
 
-	res.status("200");
+  // Search for user in users table
+  db.query('SELECT * FROM users WHERE name=\'' + dataObject.UserID+'\'').then(function (rows) {
+    // If the user is found (and is unique), query the database for Carbon Calc Results
+    if (rows.length == 1) {
+      db.query('SELECT * FROM carbon_calc_results WHERE user_id=\'' + rows[0].id + '\'').then(function(rows) {
+        console.log(rows)
+        res.status(200).send(JSON.stringify(rows))
 
-	var col = db.get("carbon").collection('userData');
+        // If no data is found, return an empty user data object.
+        if (rows.length == 0) res.status(404).send(JSON.stringify(dataObject))
+        else {
+          // Clear data array
+          dataObject.data = []
 
-	col.find({"UserID" : dataObject.UserID}).limit(1).toArray(
-		function(err,rslt) {
+          // Iterate over each record, and convert into CC compatible JSON format
+          rows.forEach(function(row) {
+            let data = {
+              "date": row.time,
+              "totals": [
+                row.transportation,
+                row.consumption,
+                row.energy,
+                row.food,
+                row.water
+              ],
+              "location": {
+                "ip": row.ip,
+                "continent_code": row.continent_code,
+                "continent_name": row.continent_name,
+                "country_code": row.country_code,
+                "country_name": row.country_name,
+                "region_code": row.region_code,
+                "region_name": row.region_name,
+                "city": row.city,
+                "zip": row.zip
+              }
+            }
+            dataObject.data.push(data)
+          })
+        }
+      }).catch(err => {
+        res.status(400).send('400: ' + err.message)
+      })
 
-			// Search the user's data for today's date.
-      		// The user can only upload a maximum of 1 carbon footprint per day.
-			if (rslt.length > 0) {
-				var userObject = rslt[0];
-				var update = false;
-				console.log(dataObject);
+      // If the user is not found...
+    } else {
+      // ... return a user JSON object with no historical data.
+      res.status(404).send(JSON.stringify(dataObject))
+    }
+  }).catch(err => {
+    res.status(400).send('400: ' + err.message)
+  })
+})
 
-				for (var i = 0; i < userObject.data.length; i++) {
-					//if date exists in the users list
-					if (userObject.data[i].date === dataObject.data[0].date) {
-						update = true;
-						userObject.data[i] = dataObject.data[0]; //replace it
-						console.log("Replace data.")
-					}
-				}
+// Upload User Data
+router.post('/carbonCalculator/upload', function (req, res) {
+  // Get user data from client
+  let dataObject = req.body;
 
-				//if the date didnt exist, push the new data
-				if (!update) {
-					userObject.data.push(dataObject.data[0]);
-					console.log("Push new data.");
-				}
-				console.log(userObject.data);
+  // Search for user in users table
+  db.query('SELECT * FROM users WHERE name=\'' + dataObject.UserID+'\'').then(function (rows) {
+    // If the user is found (and is unique), query the database for Carbon Calc Results
+    if (rows.length == 1) {
+      // Insert data into database
+      db.query('INSERT INTO carbon_calc_results (time, user_id, transportation, consumption, energy, food, waste, water, ip, continent_code, continent_name, country_code, country_name, region_code, region_name, city, zip) VALUES (' + dataObject.data[0].date + ', ' + rows[0].id + ', ' + dataObject.data[0].totals[0] + ', ' + dataObject.data[0].totals[1] + ', ' + dataObject.data[0].totals[2] + ', ' + dataObject.data[0].totals[3] + ', 0, ' + dataObject.data[0].totals[4] + ', ' + dataObject.data[0].location.ip + ', ' + dataObject.data[0].location.continent_code + ', ' + dataObject.data[0].location.continent_name + ', ' + dataObject.data[0].location.country_code + ', ' + dataObject.data[0].location.country_name + ', ' + dataObject.data[0].location.region_code + ', ' + dataObject.data[0].location.region_name + ', ' + dataObject.data[0].location.city + ', ' + dataObject.data[0].location.zip + ')').catch(err => {
+        res.status(400).send('400: ' + err.message)
+      })
+      // Record entered successfully.
+      res.status(200).send("Added new data to user.");
 
-				//update database with new data.var 
-				col.update({"_id":userObject._id},{$set:{"data" : userObject.data}});
-				//send a result message for debugging
-				res.send("Added new data to user.");
-			}
-			else {
-				//insert user object into database
-				col.insert(dataObject);
-				//send result message for debugging
-				res.send("User inserted into database.")
-			}
-		}
-	);
-});
-
-/*======================================
-			DATA RETRIEVAL
-========================================
-Retrieves user data in JSON form
-*/
-router.post('/download',function(req, res) {
-	var dataObject = req.body;
-
-	//Get userData collection
-	var col = db.get("carbon").collection("userData");
-
-	col.find({"UserID" : dataObject.UserID}).limit(1).toArray(
-		function(err,rslt) {
-			//if the user exists in the DB
-			if (rslt.length > 0) { 
-				var userObject = rslt[0];
-
-				//send success status
-				res.status("200");
-
-				//send users object
-				res.send(JSON.stringify(userObject));
-			}
-			//user doesnt exist
-			else {
-				//send error status and message
-				res.status("500");
-				res.send("Error: No such user.")
-			}
-		}
-	);
-
-});
+      // If the user is not found...
+    } else {
+      // ... return a user JSON object with no historical data.
+      res.status(404).send(JSON.stringify(dataObject))
+    }
+  }).catch(err => {
+    res.status(400).send('400: ' + err.message)
+  })
+})
 
 module.exports = router;
