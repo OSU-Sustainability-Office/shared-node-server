@@ -7,9 +7,10 @@
 var express  = require('express');
 var app      = express();
 var port     = process.env.PORT ? process.env.PORT : 3000;   // NOTE: Port 80 is forwarded to 3000 on our ec2 instance
-var db       = require('./db') // Database     // this command:
-var bodyParser   = require('body-parser');     //sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000
+var db       = require('./db') // Database                   // this command:
+var bodyParser   = require('body-parser');                   //sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000
 var morgan       = require('morgan');
+
 
 require('dotenv').config()
 
@@ -31,6 +32,6 @@ db.connect(function (err, connection) {
   }
   //Start the server
   app.listen(port, function () {
-    console.log("Server listening on port:", port);
+    console.log('Server listening on port:', port);
   });
 });
