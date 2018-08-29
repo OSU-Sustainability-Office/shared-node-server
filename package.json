@@ -19,9 +19,11 @@
   "dependencies": {
     "aws-sdk": "^2.302.0",
     "body-parser": "^1.18.3",
+    "cas-authentication": "0.0.8",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
+    "express-session": "^1.15.6",
     "mongodb": "^2.2.33",
     "mongoose": "^5.1.1",
     "morgan": "^1.9.0",
