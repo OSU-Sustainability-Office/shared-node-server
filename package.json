@@ -22,6 +22,7 @@
     "cas-authentication": "0.0.8",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
+    "dynamodb-store": "^1.0.8",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "mongodb": "^2.2.33",
