@@ -1,5 +1,3 @@
-const appURL = 'http://ec2-52-39-141-177.us-west-2.compute.amazonaws.com/'
-
 var express = require('express')
 var router = express.Router()
 var httpreq = require('httpreq')
