@@ -19,17 +19,25 @@ router.post('/login', function (req, res) {
   // Update session with new returnURI if one is supplied
   req.session.returnURI = req.body.returnURI.length > 0 ? req.body.returnURI : 'http://carbon.campusops.oregonstate.edu/'
 
-  // Redirect user to login url with application url
-	res.redirect('https://login.oregonstate.edu/idp/profile/cas/login?service=' + process.env.CAS_APPLICATION_URL)
+  // If the user has already logged in, intelligently redirect them back to the source application.
+  if (req.session.UserID) res.redirect(req.session.returnURI)
+  else {
+    // Redirect user to login url with application url
+	  res.redirect('https://login.oregonstate.edu/idp/profile/cas/login?service=' + process.env.CAS_APPLICATION_URL)
+  }
 })
 
 // User initiates login
 router.get('/login', function (req, res) {
-  // Update session with new returnURI if one is supplied
-  req.session.returnURI = 'http://52.39.141.177:3478/'
+  // HTTP GET requests will use URI parameters
+  req.session.returnURI = req.query.returnURI.length > 0 ? req.query.returnURI : 'http://carbon.campusops.oregonstate.edu/'
 
-  // Redirect user to login url with application url
-	res.redirect('https://login.oregonstate.edu/idp/profile/cas/login?service=' + process.env.CAS_APPLICATION_URL)
+  // If the user has already logged in, intelligently redirect them back to the source application.
+  if (req.session.UserID) res.redirect(req.session.returnURI)
+  else {
+    // Redirect user to login url with application url
+	  res.redirect('https://login.oregonstate.edu/idp/profile/cas/login?service=' + process.env.CAS_APPLICATION_URL)
+  }
 })
 
 // User logs in successfully and is redirected back to this route
@@ -54,36 +62,23 @@ router.get('/session', function (req, res) {
       // Set session variables
       req.session.firstName = doc.getElementsByTagName("cas:firstname")[0].childNodes[0].nodeValue
       req.session.primaryAffiliation = doc.getElementsByTagName("cas:eduPersonPrimaryAffiliation")[0].childNodes[0].nodeValue
-      req.session.onid = doc.getElementsByTagName("cas:uid")[0].childNodes[0].nodeValue
+      req.session.UserID = doc.getElementsByTagName("cas:uid")[0].childNodes[0].nodeValue
     }
     res.redirect(req.session.returnURI)
   })
+})
 
+router.get('/userData/:dataToGet', function(req, res) {
+  // I was going to cache all user data in the user's session to prevent duplicate database queries; however, the session itself is stored in the database. Therefore, retrieving the user's session requires a database query, negating any benefits that can be derived from caching the user's data in the session. -JW
+
+  // Retrieve the user's data from the database
+  db.getUser(req.session.UserID).then(function(data) {
+    // Respond to the HTTP request with the data requested.
+    res.status(200).send(data[req.params.dataToGet])
+  }).catch((rej) => {
+    res.status(404).send('Error 0: dataToRetrieve did not match any columns in the database.')
+    console.log(rej)
+  })
 })
 
 module.exports = router
-
-// Update user variables, such as UID and name
-function updateUserVariables(res) {
-  var parser;
-  var doc;
-  if (window.DOMParser) {
-    parser = new DOMParser();
-    doc = parser.parseFromString(res, "text/xml");
-  } else { // IE uses ActiveX
-    parser = new ActiveXObject("Microsoft.XMLDOM");
-    doc.async = false;
-    doc.loadXML(res);
-  }
-
-  // Set global Variables
-  firstName = doc.getElementsByTagName("cas:firstname")[0].childNodes[0].nodeValue;
-
-  primaryAffiliation = doc.getElementsByTagName("cas:eduPersonPrimaryAffiliation")[0].childNodes[0].nodeValue;
-
-  uid = doc.getElementsByTagName("cas:uid")[0].childNodes[0].nodeValue;
-
-  // Update header with user's name.
-  var header = document.getElementsByClassName("well-md")[0].getElementsByTagName("h1")[0].innerHTML = "Hello, " + firstName + "! Welcome to your Carbon Calculator.";
-
-}
