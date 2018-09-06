@@ -48,34 +48,6 @@ app.use('/auth',require('./controllers/auth.js'))
 // Carbon-Calculator Application
 app.use('/carbon',require('./controllers/carbon.js'))
 
-//-------------------------------
-var httpreq = require('httpreq')
-db.initialize()
-
-// User initiates login
-router.get('/login/:returnURI', function (req, res) {
-  // Update session
-  req.session.returnURI = req.params.returnURI
-  console.log(req.session)
-
-  // Redirect user to login url with application url
-	res.redirect('https://login.oregonstate.edu/idp/profile/cas/login?service=' + process.env.CAS_APPLICATION_URL)
-})
-
-// User logs in successfully and is redirected back to this route
-router.get('/energy', function (req, res) {
-
-  // Complete login handshake
-  httpreq.get('http://login.oregonstate.edu/idp/profile/cas/serviceValidate?ticket=' + req.query.ticket + '&service=' + process.env.CAS_APPLICATION_URL, function (err, result) {
-    if (err) return console.log(err)
-    console.log(result.body)
-    res.send("done")
-  })
-
-})
-
-//------------------------
-
 // Connect to DB
 db.connect(function (err, connection) {
   if (err) {
