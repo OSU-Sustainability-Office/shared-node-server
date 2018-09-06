@@ -23,6 +23,15 @@ router.post('/login', function (req, res) {
 	res.redirect('https://login.oregonstate.edu/idp/profile/cas/login?service=' + process.env.CAS_APPLICATION_URL)
 })
 
+// User initiates login
+router.get('/login', function (req, res) {
+  // Update session with new returnURI if one is supplied
+  req.session.returnURI = 'http://52.39.141.177:3478/'
+
+  // Redirect user to login url with application url
+	res.redirect('https://login.oregonstate.edu/idp/profile/cas/login?service=' + process.env.CAS_APPLICATION_URL)
+})
+
 // User logs in successfully and is redirected back to this route
 router.get('/session', function (req, res) {
   // Complete login handshake
