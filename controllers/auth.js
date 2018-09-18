@@ -21,14 +21,14 @@ router.post('/login', function (req, res) {
   if (req.session.UserID) res.redirect(req.session.returnURI)
   else {
     // Redirect user to login url with application url
-	  res.redirect('https://login.oregonstate.edu/idp/profile/cas/login?service=' + process.env.CAS_APPLICATION_URL)
+	  res.redirect('https://login.oregonstate.edu/cas-dev/login?service=' + process.env.CAS_APPLICATION_URL)
   }
 })
 
 // User initiates login
 router.get('/login', function (req, res) {
   // HTTP GET requests will use URI parameters
-  req.session.returnURI = req.query.returnURI.length ? req.query.returnURI : 'http://carbon.campusops.oregonstate.edu/'
+  req.session.returnURI = req.query.returnURI ? req.query.returnURI : 'http://carbon.campusops.oregonstate.edu/'
 
   // If the user has already logged in, intelligently redirect them back to the source application.
   if (req.session.UserID) res.redirect(req.session.returnURI)
@@ -62,7 +62,8 @@ router.get('/session', function (req, res) {
       req.session.primaryAffiliation = doc.getElementsByTagName("cas:eduPersonPrimaryAffiliation")[0].childNodes[0].nodeValue
       req.session.UserID = doc.getElementsByTagName("cas:uid")[0].childNodes[0].nodeValue
     }
-    res.redirect(req.session.returnURI)
+    if (req.session.returnURI) res.redirect(req.session.returnURI)
+    else res.redirect('http://carbon.campusops.oregonstate.edu')
   })
 })
 
