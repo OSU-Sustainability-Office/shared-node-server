@@ -28,12 +28,15 @@ router.post('/login', function (req, res) {
 // User initiates login
 router.get('/login', function (req, res) {
   // HTTP GET requests will use URI parameters
-  console.log(req.query.returnURI)
+  console.log(req.session.returnURI)
   if (req.query.returnURI.length)
     req.session.returnURI = req.query.returnURI
   else
     req.session.returnURI = 'http://carbon.campusops.oregonstate.edu/'
 
+  console.log(req.session.returnURI)
+
+  
   // If the user has already logged in, intelligently redirect them back to the source application.
   if (req.session.UserID) res.redirect(req.session.returnURI)
   else {
