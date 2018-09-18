@@ -15,11 +15,8 @@ db.initialize()
 // User initiates login
 router.post('/login', function (req, res) {
   // Update session with new returnURI if one is supplied
-  if (req.query.returnURI)
-    req.session.returnURI = req.query.returnURI
-  else
-    req.session.returnURI = 'http://carbon.campusops.oregonstate.edu/'
-  
+  req.session.returnURI = req.body.returnURI.length ? req.body.returnURI : 'http://carbon.campusops.oregonstate.edu/'
+
   // If the user has already logged in, intelligently redirect them back to the source application.
   if (req.session.UserID) res.redirect(req.session.returnURI)
   else {
@@ -31,6 +28,7 @@ router.post('/login', function (req, res) {
 // User initiates login
 router.get('/login', function (req, res) {
   // HTTP GET requests will use URI parameters
+  console.log(req.query.returnURI)
   if (req.query.returnURI)
     req.session.returnURI = req.query.returnURI
   else
