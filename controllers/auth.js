@@ -2,6 +2,7 @@ var express = require('express')
 var router = express.Router()
 var httpreq = require('httpreq')
 var db = require('../ddb.js')
+var DomParser = require('dom-parser');
 db.initialize()
 
 // How CAS login works:
@@ -48,28 +49,22 @@ router.get('/login', function (req, res) {
 // User logs in successfully and is redirected back to this route
 router.get('/session', function (req, res) {
   // Complete login handshake
-  httpreq.get('http://login.oregonstate.edu/idp/profile/cas/serviceValidate?ticket=' + req.query.ticket + '&service=' + process.env.CAS_APPLICATION_URL, (err, r) => {
+  httpreq.get('https://login.oregonstate.edu/idp-dev/profile/cas/serviceValidate?ticket=' + req.query.ticket + '&service=' + process.env.CAS_APPLICATION_URL, (err, r) => {
     if (err) return console.log(err)
     if (r.body.includes("Success")) {
 
       // Parse xml into user variables
-      let parser
-      let doc
-      if (window.DOMParser) { // For sane people who use quality web browsers
-        parser = new DOMParser()
-        doc = parser.parseFromString(r.body, "text/xml")
-      } else { // For plebs that use IE/ActiveX
-        parser = new ActiveXObject("Microsoft.XMLDOM")
-        doc.async = false;
-        doc.loadXML(r.body);
-      }
+      let parser = new DomParser()
+      let doc = parser.parseFromString(r.body)
 
       // Set session variables
       req.session.firstName = doc.getElementsByTagName("cas:firstname")[0].childNodes[0].nodeValue
       req.session.primaryAffiliation = doc.getElementsByTagName("cas:eduPersonPrimaryAffiliation")[0].childNodes[0].nodeValue
       req.session.UserID = doc.getElementsByTagName("cas:uid")[0].childNodes[0].nodeValue
+      res.redirect(req.session.returnURI)
+    } else {
+      res.status(404).send('Error 1: Login failed. Please try again.')
     }
-    res.redirect(req.session.returnURI)
   })
 })
 
@@ -79,7 +74,11 @@ router.get('/userData/:dataToGet', function(req, res) {
   // Retrieve the user's data from the database
   db.getUser(req.session.UserID).then(function(data) {
     // Respond to the HTTP request with the data requested.
-    res.status(200).send(data[req.params.dataToGet])
+    res.status(200)
+    if (req.params.dataToGet == 'allData')
+      res.send(data)
+    else
+      res.send(data[req.params.dataToGet])
   }).catch((rej) => {
     res.status(404).send('Error 0: ' + req.params.dataToGet + ' did not match any columns in the database for ' + req.session.UserID + '.')
     console.log(rej)
