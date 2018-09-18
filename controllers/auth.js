@@ -75,7 +75,7 @@ router.get('/userData/:dataToGet', function(req, res) {
     // Respond to the HTTP request with the data requested.
     res.status(200).send(data[req.params.dataToGet])
   }).catch((rej) => {
-    res.status(404).send('Error 0: ' + req.params.dataToGet + ' did not match any columns in the database.')
+    res.status(404).send('Error 0: ' + req.params.dataToGet + ' did not match any columns in the database for ' + req.session.UserID + '.')
     console.log(rej)
   })
 })
