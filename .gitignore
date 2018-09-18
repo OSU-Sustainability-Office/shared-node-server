@@ -5,3 +5,4 @@ importData.py
 getCarbonData.py
 badstuff/*
 carbonData.json
+.env
