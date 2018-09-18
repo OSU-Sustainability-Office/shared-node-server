@@ -58,9 +58,9 @@ router.get('/session', function (req, res) {
       let doc = parser.parseFromString(r.body)
 
       // Set session variables
-      req.session.firstName = doc.getElementsByTagName("cas:firstname")[0].childNodes[0].nodeValue
-      req.session.primaryAffiliation = doc.getElementsByTagName("cas:eduPersonPrimaryAffiliation")[0].childNodes[0].nodeValue
-      req.session.UserID = doc.getElementsByTagName("cas:uid")[0].childNodes[0].nodeValue
+      req.session.firstName = doc.getElementsByTagName("cas:firstname")[0].childNodes[0].textContent
+      req.session.primaryAffiliation = doc.getElementsByTagName("cas:eduPersonPrimaryAffiliation")[0].childNodes[0].textContent
+      req.session.UserID = doc.getElementsByTagName("cas:uid")[0].childNodes[0].textContent
       res.redirect(req.session.returnURI)
     } else {
       res.status(404).send('Error 1: Login failed. Please try again.')
