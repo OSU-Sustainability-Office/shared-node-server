@@ -28,15 +28,11 @@ router.post('/login', function (req, res) {
 // User initiates login
 router.get('/login', function (req, res) {
   // HTTP GET requests will use URI parameters
-  console.log(req.session.returnURI)
   if (req.query.returnURI.length)
     req.session.returnURI = req.query.returnURI
   else
     req.session.returnURI = 'http://carbon.campusops.oregonstate.edu/'
 
-  console.log(req.session.returnURI)
-
-  
   // If the user has already logged in, intelligently redirect them back to the source application.
   if (req.session.UserID) res.redirect(req.session.returnURI)
   else {
@@ -47,6 +43,7 @@ router.get('/login', function (req, res) {
 
 // User logs in successfully and is redirected back to this route
 router.get('/session', function (req, res) {
+  console.log(req.session.returnURI)
   // Complete login handshake
   httpreq.get('http://login.oregonstate.edu/idp/profile/cas/serviceValidate?ticket=' + req.query.ticket + '&service=' + process.env.CAS_APPLICATION_URL, (err, r) => {
     if (err) return console.log(err)
@@ -69,6 +66,7 @@ router.get('/session', function (req, res) {
       req.session.primaryAffiliation = doc.getElementsByTagName("cas:eduPersonPrimaryAffiliation")[0].childNodes[0].nodeValue
       req.session.UserID = doc.getElementsByTagName("cas:uid")[0].childNodes[0].nodeValue
     }
+    console.log(req.session.returnURI)
     res.redirect(req.session.returnURI)
   })
 })
