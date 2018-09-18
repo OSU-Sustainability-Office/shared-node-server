@@ -12,7 +12,7 @@ var bodyParser = require('body-parser')
 var DynamoDBStore     = require('dynamodb-store')
 
 // Allow cross-origin resource sharing
-app.use(cors())
+app.use(cors({origin: true, credentials: true}))
 
 // log every request to the console
 app.use(morgan('dev'))
