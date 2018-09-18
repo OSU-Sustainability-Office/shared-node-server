@@ -16,18 +16,12 @@ db.initialize()
 // User initiates login
 router.post('/login', function (req, res) {
   // Update session with new returnURI if one is supplied
-  console.log(req.body)
   if (req.body.returnURI)
     req.session.returnURI = req.body.returnURI
   else
     req.session.returnURI = 'http://carbon.campusops.oregonstate.edu/'
 
-  // If the user has already logged in, intelligently redirect them back to the source application.
-  if (req.session.UserID) res.redirect(req.session.returnURI)
-  else {
-    // Redirect user to login url with application url
-	  res.redirect('https://login.oregonstate.edu/cas-dev/login?service=' + process.env.CAS_APPLICATION_URL)
-  }
+  res.redirect('https://login.oregonstate.edu/cas-dev/login?service=' + process.env.CAS_APPLICATION_URL)
 })
 
 // User initiates login
@@ -38,12 +32,7 @@ router.get('/login', function (req, res) {
   else
     req.session.returnURI = 'http://carbon.campusops.oregonstate.edu/'
 
-  // If the user has already logged in, intelligently redirect them back to the source application.
-  if (req.session.UserID) res.redirect(req.session.returnURI)
-  else {
-    // Redirect user to login url with application url
-	  res.redirect('https://login.oregonstate.edu/cas-dev/login?service=' + process.env.CAS_APPLICATION_URL)
-  }
+  res.redirect('https://login.oregonstate.edu/cas-dev/login?service=' + process.env.CAS_APPLICATION_URL)
 })
 
 // User logs in successfully and is redirected back to this route
@@ -61,7 +50,21 @@ router.get('/session', function (req, res) {
       req.session.firstName = doc.getElementsByTagName("cas:firstname")[0].childNodes[0].textContent
       req.session.primaryAffiliation = doc.getElementsByTagName("cas:eduPersonPrimaryAffiliation")[0].childNodes[0].textContent
       req.session.UserID = doc.getElementsByTagName("cas:uid")[0].childNodes[0].textContent
-      res.redirect(req.session.returnURI)
+
+      // If this user has not been added to the database, add them.
+      db.getUser(req.session.UserID).catch((rej) => {
+        console.log('Adding ' + req.session.UserID + ' to db.')
+        db.updateUser({
+          onid: req.session.UserID,
+          firstName: req.session.firstName,
+          primaryAffiliation: req.session.primaryAffiliation
+        })
+        console.log("User added.")
+        res.redirect(req.session.returnURI)
+      }).then( (data) => {
+        res.redirect(req.session.returnURI)
+      })
+
     } else {
       res.status(404).send('Error 1: Login failed. Please try again.')
     }
