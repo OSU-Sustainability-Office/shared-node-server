@@ -29,7 +29,7 @@ router.post('/login', function (req, res) {
 router.get('/login', function (req, res) {
   // HTTP GET requests will use URI parameters
   console.log(req.query.returnURI)
-  if (req.query.returnURI)
+  if (req.query.returnURI.length)
     req.session.returnURI = req.query.returnURI
   else
     req.session.returnURI = 'http://carbon.campusops.oregonstate.edu/'
