@@ -34,7 +34,7 @@ router.get('/login', function (req, res) {
   if (req.session.UserID) res.redirect(req.session.returnURI)
   else {
     // Redirect user to login url with application url
-	  res.redirect('https://login.oregonstate.edu/idp/profile/cas/login?service=' + process.env.CAS_APPLICATION_URL)
+	  res.redirect('https://login.oregonstate.edu/cas-dev/login?service=' + process.env.CAS_APPLICATION_URL)
   }
 })
 
