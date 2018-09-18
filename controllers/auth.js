@@ -66,8 +66,7 @@ router.get('/session', function (req, res) {
       req.session.primaryAffiliation = doc.getElementsByTagName("cas:eduPersonPrimaryAffiliation")[0].childNodes[0].nodeValue
       req.session.UserID = doc.getElementsByTagName("cas:uid")[0].childNodes[0].nodeValue
     }
-    if (req.session.returnURI) res.redirect(req.session.returnURI)
-    else res.redirect('http://carbon.campusops.oregonstate.edu')
+    res.redirect(req.session.returnURI)
   })
 })
 
