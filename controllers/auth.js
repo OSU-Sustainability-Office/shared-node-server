@@ -42,34 +42,32 @@ router.get('/login', function (req, res) {
 })
 
 // User logs in successfully and is redirected back to this route
-router.get('/session', function (req, res) {
-  console.log(req.session.returnURI)
-  // Complete login handshake
-  httpreq.get('http://login.oregonstate.edu/idp/profile/cas/serviceValidate?ticket=' + req.query.ticket + '&service=' + process.env.CAS_APPLICATION_URL, (err, r) => {
-    if (err) return console.log(err)
-    if (r.body.includes("Success")) {
-
-      // Parse xml into user variables
-      let parser
-      let doc
-      if (window.DOMParser) { // For sane people who use quality web browsers
-        parser = new DOMParser()
-        doc = parser.parseFromString(r.body, "text/xml")
-      } else { // For plebs that use IE/ActiveX
-        parser = new ActiveXObject("Microsoft.XMLDOM")
-        doc.async = false;
-        doc.loadXML(r.body);
-      }
-
-      // Set session variables
-      req.session.firstName = doc.getElementsByTagName("cas:firstname")[0].childNodes[0].nodeValue
-      req.session.primaryAffiliation = doc.getElementsByTagName("cas:eduPersonPrimaryAffiliation")[0].childNodes[0].nodeValue
-      req.session.UserID = doc.getElementsByTagName("cas:uid")[0].childNodes[0].nodeValue
-    }
-    console.log(req.session.returnURI)
-    res.redirect(req.session.returnURI)
-  })
-})
+// router.get('/session', function (req, res) {
+//   // Complete login handshake
+//   httpreq.get('http://login.oregonstate.edu/idp/profile/cas/serviceValidate?ticket=' + req.query.ticket + '&service=' + process.env.CAS_APPLICATION_URL, (err, r) => {
+//     if (err) return console.log(err)
+//     if (r.body.includes("Success")) {
+//
+//       // Parse xml into user variables
+//       let parser
+//       let doc
+//       if (window.DOMParser) { // For sane people who use quality web browsers
+//         parser = new DOMParser()
+//         doc = parser.parseFromString(r.body, "text/xml")
+//       } else { // For plebs that use IE/ActiveX
+//         parser = new ActiveXObject("Microsoft.XMLDOM")
+//         doc.async = false;
+//         doc.loadXML(r.body);
+//       }
+//
+//       // Set session variables
+//       req.session.firstName = doc.getElementsByTagName("cas:firstname")[0].childNodes[0].nodeValue
+//       req.session.primaryAffiliation = doc.getElementsByTagName("cas:eduPersonPrimaryAffiliation")[0].childNodes[0].nodeValue
+//       req.session.UserID = doc.getElementsByTagName("cas:uid")[0].childNodes[0].nodeValue
+//     }
+//     res.redirect(req.session.returnURI)
+//   })
+// })
 
 router.get('/userData/:dataToGet', function(req, res) {
   // I was going to cache all user data in the user's session to prevent duplicate database queries; however, the session itself is stored in the database. Therefore, retrieving the user's session requires a database query, negating any benefits that can be derived from caching the user's data in the session. -JW
