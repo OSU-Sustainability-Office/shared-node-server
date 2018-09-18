@@ -7,7 +7,7 @@ db.initialize()
 // Log request times.
 router.use(function timeLog(req,res,next){
 	console.log('Time: ', Date.now());
-	next();
+	next()
 })
 
 // Download User Data
