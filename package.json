@@ -21,6 +21,7 @@
     "body-parser": "^1.18.3",
     "cas-authentication": "0.0.8",
     "cors": "^2.8.4",
+    "dom-parser": "^0.1.5",
     "dotenv": "^6.0.0",
     "dynamodb-store": "^1.0.8",
     "express": "^4.16.3",
@@ -33,6 +34,7 @@
     "mysql": "^2.16.0",
     "nodemon": "^1.18.3",
     "requestify": "^0.2.5",
+    "sanitize": "^2.1.0",
     "xmlparser": "^0.1.0"
   }
 }
