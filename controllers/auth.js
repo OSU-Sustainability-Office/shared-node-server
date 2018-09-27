@@ -14,18 +14,13 @@ db.initialize()
 //  6. Session is fully initialized, and the user is redirected back to the return URI
 
 // User initiates login
-router.post('/login', function (req, res) {
-  // Update session with new returnURI if one is supplied
-  if (req.body.returnURI)
-    req.session.returnURI = req.body.returnURI
-  else
-    req.session.returnURI = 'http://carbon.campusops.oregonstate.edu/'
-
-  res.redirect('https://login.oregonstate.edu/cas-dev/login?service=' + process.env.CAS_APPLICATION_URL)
-})
-
-// User initiates login
 router.get('/login', function (req, res) {
+
+  // Re initialize session object
+  req.session.regenerate(err => {
+    res.status(404).send('Error 3: Could not regenerate session.')
+  })
+
   // HTTP GET requests will use URI parameters
   if (req.query.returnURI)
     req.session.returnURI = req.query.returnURI
@@ -75,7 +70,7 @@ router.get('/userData/:dataToGet', function(req, res) {
   // I was going to cache all user data in the user's session to prevent duplicate database queries; however, the session itself is stored in the database. Therefore, retrieving the user's session requires a database query, negating any benefits that can be derived from caching the user's data in the session. -JW
 
   // Retrieve the user's data from the database
-  db.getUser(req.session.UserID).then(function(data) {
+  db.getUser(req.session.UserID).then (function(data) {
     // Respond to the HTTP request with the data requested.
     res.status(200)
     if (req.params.dataToGet == 'allData')
@@ -86,6 +81,14 @@ router.get('/userData/:dataToGet', function(req, res) {
     res.status(404).send('Error 0: ' + req.params.dataToGet + ' did not match any columns in the database for ' + req.session.UserID + '.')
     console.log(rej)
   })
+})
+
+router.get('/logout', (req, res) => {
+  req.session.destroy(function(err) {
+    console.log(err)
+    res.status(404).send('Error 2: Logout failed.')
+  })
+  res.status(200).send('Logged out!')
 })
 
 module.exports = router
