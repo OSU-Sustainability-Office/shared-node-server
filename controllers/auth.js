@@ -17,6 +17,12 @@ db.initialize()
 
 // User initiates login
 router.get('/login', function (req, res) {
+
+  // Re initialize session object
+  req.session.regenerate(err => {
+    res.status(404).send('Error 3: Could not regenerate session.')
+  })
+  
   // HTTP GET requests will use URI parameters
   if (req.query.returnURI) {
     req.session.returnURI = req.query.returnURI
@@ -83,6 +89,7 @@ router.get('/userData/:dataToGet', function (req, res) {
 
   // Retrieve the user's data from the database
   db.getUser(req.session.UserID).then(function (data) {
+
     // Respond to the HTTP request with the data requested.
     res.status(200)
     if (req.params.dataToGet === 'allData') {
@@ -94,6 +101,14 @@ router.get('/userData/:dataToGet', function (req, res) {
     res.status(404).send('Error 0: ' + req.params.dataToGet + ' did not match any columns in the database for ' + req.session.UserID + '.')
     console.log(rej)
   })
+})
+
+router.get('/logout', (req, res) => {
+  req.session.destroy(function(err) {
+    console.log(err)
+    res.status(404).send('Error 2: Logout failed.')
+  })
+  res.status(200).send('Logged out!')
 })
 
 module.exports = router
