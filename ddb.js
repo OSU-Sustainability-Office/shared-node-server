@@ -2,22 +2,23 @@
 // On Linux, AWS loads user credentials from ~/.aws/credentials.
 // For more information, take a look at https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/loading-node-credentials-shared.html
 var AWS = require('aws-sdk')
-AWS.config.update({region: 'us-west-2'});
+AWS.config.update({region: 'us-west-2'})
 
 var state = {
   ddb: null
 }
 
-exports.initialize = function() {
-  if (!state.ddb)
+exports.initialize = function () {
+  if (!state.ddb) {
     state.ddb = new AWS.DynamoDB.DocumentClient()
+  }
 }
 
 // This function querys the DynamoDB for the specified user's data.
-exports.getUser = function(onid) {
-	// AWS SDK DDB Query Parameters - https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
+exports.getUser = function (onid) {
+  // AWS SDK DDB Query Parameters - https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
   const params = {
-		'TableName': 'users',
+    'TableName': 'users',
     'Select': 'ALL_ATTRIBUTES',
     'Limit': 1,
     'ConsistentRead': true,
@@ -25,22 +26,22 @@ exports.getUser = function(onid) {
     'ExpressionAttributeValues': {
       ':onid': onid
     }
-	}
+  }
   // Using a promise allows for promise chains.
   return new Promise((resolve, reject) => {
     state.ddb.query(params, function (err, data) {
-      if (err || data.Items.length == 0) { return reject(err) }
+      if (err || data.Items.length === 0) { return reject(err) }
       resolve(data.Items[0])
     })
   })
 }
 
 // Uploads a user to the db.
-var putUser = function(usr) {
+var putUser = function (usr) {
   // AWS SDK DDB Query Parameters - https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html
   const params = {
     'TableName': 'users',
-    'Item': usr,
+    'Item': usr
   }
 
   return new Promise((resolve, reject) => {
@@ -57,17 +58,16 @@ var putUser = function(usr) {
 //      - if the user exists, then the function compares the user's data and
 //        updates data objects as necessary. Data objects in the database with
 //        the same date as new data objects will be updated.
-exports.updateUser = function(usr) {
-
+exports.updateUser = function (usr) {
   // Determine if the user exists.
-  this.getUser(usr.onid).then(function(dbUsr) {
+  this.getUser(usr.onid).then(function (dbUsr) {
     // User exists.
 
     // Map data elements to their dates
     const dataMap = dbUsr.data.map(d => d.date)
 
     // Iterate over the new data
-    usr.data.forEach(function(data, index, dataArr) {
+    usr.data.forEach(function (data, index, dataArr) {
       // Search dataMap for the current data's date
       let i = dataMap.find(data.date)
       // If the date is found, replace the data object with the most recent
@@ -86,5 +86,5 @@ exports.updateUser = function(usr) {
     putUser(usr).catch((rej) => {
       console.log(rej)
     })
-	})
+  })
 }
