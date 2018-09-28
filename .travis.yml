@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+    - "10"
+
+branches:
+  only:
+  - master
+
+after_success:
+  - echo "${RSA_KEY}" | base64 --decode > /tmp/rsa
+  - scp -i /tmp/rsa -rp  $TRAVIS_BUILD_DI ubuntu@ec2-52-39-141-177.us-west-2.compute.amazonaws.com:/home/ubuntu/shared-node-server
+  - ssh -i /tmp/rsa ubuntu@ec2-52-39-141-177.us-west-2.compute.amazonaws.com << 'ENDSSH'
+  - cd shared-node-server
+  - npm install
+  - forever stopall
+  - forever start nodeServer.js
+  - ENDSSH
