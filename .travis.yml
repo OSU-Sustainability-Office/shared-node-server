@@ -10,4 +10,4 @@ after_success:
   - openssl aes-256-cbc -K $encrypted_d127a46f8a02_key -iv $encrypted_d127a46f8a02_iv -in key.pem.enc -out /tmp/rsa -d
   - sudo chmod 600 /tmp/rsa
   - scp -oStrictHostKeyChecking=no -i /tmp/rsa -rp $TRAVIS_BUILD_DIR/nodeServer.js $TRAVIS_BUILD_DIR/db.js $TRAVIS_BUILD_DIR/ddb.js $TRAVIS_BUILD_DIR/package.json $TRAVIS_BUILD_DIR/data $TRAVIS_BUILD_DIR/controllers ubuntu@ec2-52-39-141-177.us-west-2.compute.amazonaws.com:/home/ubuntu/shared-node-server
-  - ssh -oStrictHostKeyChecking=no -i /tmp/rsa ubuntu@ec2-52-39-141-177.us-west-2.compute.amazonaws.com 'cd shared-node-server; npm install; forever stopall; forever start nodeServer.js;'
+  - ssh -oStrictHostKeyChecking=no -i /tmp/rsa ubuntu@ec2-52-39-141-177.us-west-2.compute.amazonaws.com 'cd shared-node-server; npm install; forever stopall; forever -p /home/ubuntu/.forever start nodeServer.js;'
