@@ -7,8 +7,8 @@ branches:
   - master
 
 after_success:
-  - echo "${RSA_KEY}" | base64 --decode > /tmp/rsa
-  - scp -i /tmp/rsa -rp  $TRAVIS_BUILD_DI ubuntu@ec2-52-39-141-177.us-west-2.compute.amazonaws.com:/home/ubuntu/shared-node-server
+  - openssl aes-256-cbc -K $encrypted_d127a46f8a02_key -iv $encrypted_d127a46f8a02_iv -in key.pem.enc -out /tmp/rsa -d
+  - scp -i /tmp/rsa -rp  $TRAVIS_BUILD_DIR ubuntu@ec2-52-39-141-177.us-west-2.compute.amazonaws.com:/home/ubuntu/shared-node-server
   - ssh -oStrictHostKeyChecking=no -i /tmp/rsa ubuntu@ec2-52-39-141-177.us-west-2.compute.amazonaws.com << 'ENDSSH'
   - cd shared-node-server
   - npm install
