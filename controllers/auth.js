@@ -46,7 +46,7 @@ router.get('/login', function (req, res) {
       res.redirect(req.session.returnURI)
     })
   } else {
-    res.redirect('https://login.oregonstate.edu/cas-dev/login?service=' + process.env.CAS_APPLICATION_URL)
+    res.redirect('https://login.oregonstate.edu/cas/login?service=' + process.env.CAS_APPLICATION_URL)
   }
 })
 
