@@ -78,7 +78,7 @@ router.get('/session', function (req, res) {
         res.redirect(req.session.returnURI)
       })
     } else {
-      res.status(404).send('Error 1: Login failed. Please try again.')
+      res.status(404).send('Error 1: Login failed. Please try again.' + '\nERR:\n' + r.body)
     }
   })
 })
