@@ -17,12 +17,11 @@ db.initialize()
 
 // User initiates login
 router.get('/login', function (req, res) {
-
   // Re initialize session object
-  req.session.regenerate(err => {
-    res.status(404).send('Error 3: Could not regenerate session.')
-  })
-  
+  // req.session.regenerate(err => {
+  //   res.status(400).send('400: ' + err.message)
+  // })
+
   // HTTP GET requests will use URI parameters
   if (req.query.returnURI) {
     req.session.returnURI = req.query.returnURI
@@ -89,22 +88,19 @@ router.get('/userData/:dataToGet', function (req, res) {
 
   // Retrieve the user's data from the database
   db.getUser(req.session.UserID).then(function (data) {
-
     // Respond to the HTTP request with the data requested.
-    res.status(200)
     if (req.params.dataToGet === 'allData') {
       res.send(data)
     } else {
       res.send(data[req.params.dataToGet])
     }
-  }).catch((rej) => {
-    res.status(404).send('Error 0: ' + req.params.dataToGet + ' did not match any columns in the database for ' + req.session.UserID + '.')
-    console.log(rej)
+  }).catch((e) => {
+    res.status(400).send('400: ' + e.message)
   })
 })
 
 router.get('/logout', (req, res) => {
-  req.session.destroy(function(err) {
+  req.session.destroy(function (err) {
     console.log(err)
     res.status(404).send('Error 2: Logout failed.')
   })
