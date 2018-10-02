@@ -18,15 +18,21 @@ db.initialize()
 // User initiates login
 router.get('/login', function (req, res) {
   // Re initialize session object
+<<<<<<< HEAD
   // req.session.regenerate(err => {
   //   res.status(400).send('400: ' + err.message)
   // })
+=======
+  req.session.regenerate(err => {
+    res.status(404).send('Error 3: Could not regenerate session.')
+  })
+>>>>>>> e18a5a696796e80a56482c8cb9868cee471be5bd
 
   // HTTP GET requests will use URI parameters
   if (req.query.returnURI) {
     req.session.returnURI = req.query.returnURI
   } else {
-    req.session.returnURI = 'http://carbon.campusops.oregonstate.edu/'
+    req.session.returnURI = 'https://myco2.sustainability.oregonstate.edu/'
   }
   if (process.env.CAS_DEV === 'true') {
     req.session.firstName = process.env.CAS_DEV_NAME
@@ -45,14 +51,14 @@ router.get('/login', function (req, res) {
       res.redirect(req.session.returnURI)
     })
   } else {
-    res.redirect('https://login.oregonstate.edu/cas-dev/login?service=' + process.env.CAS_APPLICATION_URL)
+    res.redirect('https://login.oregonstate.edu/cas/login?service=' + process.env.CAS_APPLICATION_URL)
   }
 })
 
 // User logs in successfully and is redirected back to this route
 router.get('/session', function (req, res) {
   // Complete login handshake
-  httpreq.get('https://login.oregonstate.edu/idp-dev/profile/cas/serviceValidate?ticket=' + req.query.ticket + '&service=' + process.env.CAS_APPLICATION_URL, (err, r) => {
+  httpreq.get('https://login.oregonstate.edu/idp/profile/cas/serviceValidate?ticket=' + req.query.ticket + '&service=' + process.env.CAS_APPLICATION_URL, (err, r) => {
     if (err) return console.log(err)
     if (r.body.includes('Success')) {
       // Parse xml into user variables
@@ -102,9 +108,11 @@ router.get('/userData/:dataToGet', function (req, res) {
 router.get('/logout', (req, res) => {
   req.session.destroy(function (err) {
     console.log(err)
-    res.status(404).send('Error 2: Logout failed.')
+    if (err)
+      res.status(404).send('Error 2: Logout failed.')
+    else
+      res.status(200).send('Logged out!')
   })
-  res.status(200).send('Logged out!')
 })
 
 module.exports = router
