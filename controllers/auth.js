@@ -18,15 +18,9 @@ db.initialize()
 // User initiates login
 router.get('/login', function (req, res) {
   // Re initialize session object
-<<<<<<< HEAD
   // req.session.regenerate(err => {
   //   res.status(400).send('400: ' + err.message)
   // })
-=======
-  req.session.regenerate(err => {
-    res.status(404).send('Error 3: Could not regenerate session.')
-  })
->>>>>>> e18a5a696796e80a56482c8cb9868cee471be5bd
 
   // HTTP GET requests will use URI parameters
   if (req.query.returnURI) {
