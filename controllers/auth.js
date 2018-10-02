@@ -22,7 +22,7 @@ router.get('/login', function (req, res) {
   req.session.regenerate(err => {
     res.status(404).send('Error 3: Could not regenerate session.')
   })
-  
+
   // HTTP GET requests will use URI parameters
   if (req.query.returnURI) {
     req.session.returnURI = req.query.returnURI
@@ -106,9 +106,11 @@ router.get('/userData/:dataToGet', function (req, res) {
 router.get('/logout', (req, res) => {
   req.session.destroy(function(err) {
     console.log(err)
-    res.status(404).send('Error 2: Logout failed.')
+    if (err)
+      res.status(404).send('Error 2: Logout failed.')
+    else
+      res.status(200).send('Logged out!')  
   })
-  res.status(200).send('Logged out!')
 })
 
 module.exports = router
