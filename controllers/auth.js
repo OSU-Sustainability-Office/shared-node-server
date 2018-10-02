@@ -53,7 +53,7 @@ router.get('/login', function (req, res) {
 // User logs in successfully and is redirected back to this route
 router.get('/session', function (req, res) {
   // Complete login handshake
-  httpreq.get('https://login.oregonstate.edu/idp-dev/profile/cas/serviceValidate?ticket=' + req.query.ticket + '&service=' + process.env.CAS_APPLICATION_URL, (err, r) => {
+  httpreq.get('https://login.oregonstate.edu/idp/profile/cas/serviceValidate?ticket=' + req.query.ticket + '&service=' + process.env.CAS_APPLICATION_URL, (err, r) => {
     if (err) return console.log(err)
     if (r.body.includes('Success')) {
       // Parse xml into user variables
