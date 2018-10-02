@@ -27,7 +27,7 @@ router.get('/login', function (req, res) {
   if (req.query.returnURI) {
     req.session.returnURI = req.query.returnURI
   } else {
-    req.session.returnURI = 'http://carbon.campusops.oregonstate.edu/'
+    req.session.returnURI = 'https://myco2.sustainability.oregonstate.edu/'
   }
   if (process.env.CAS_DEV === 'true') {
     req.session.firstName = process.env.CAS_DEV_NAME
@@ -109,7 +109,7 @@ router.get('/logout', (req, res) => {
     if (err)
       res.status(404).send('Error 2: Logout failed.')
     else
-      res.status(200).send('Logged out!')  
+      res.status(200).send('Logged out!')
   })
 })
 
