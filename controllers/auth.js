@@ -105,7 +105,7 @@ router.get('/logout', (req, res) => {
     if (err)
       res.status(404).send('Error 2: Logout failed.')
     else
-      res.status(200).send('Logged out!')
+      res.redirect('https://login.oregonstate.edu/idp/profile/cas/logout')
   })
 })
 
