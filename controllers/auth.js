@@ -99,13 +99,25 @@ router.get('/userData/:dataToGet', function (req, res) {
   })
 })
 
-router.get('/logout', (req, res) => {
+// Logout with redirect.
+router.get('/logoutRedirect', (req, res) => {
   req.session.destroy(function (err) {
     console.log(err)
     if (err)
       res.status(404).send('Error 2: Logout failed.')
     else
       res.redirect('https://login.oregonstate.edu/idp/profile/cas/logout')
+  })
+})
+
+// Logout and return logout url
+router.get('/logout', (req, res) => {
+  req.session.destroy(function (err) {
+    console.log(err)
+    if (err)
+      res.status(404).send('Error 2: Logout failed.')
+    else
+      res.send('{\'url\': \'https://login.oregonstate.edu/idp/profile/cas/logout\'}')
   })
 })
 
