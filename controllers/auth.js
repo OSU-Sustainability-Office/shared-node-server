@@ -90,6 +90,7 @@ router.get('/userData/:dataToGet', function (req, res) {
   db.getUser(req.session.UserID).then(function (data) {
     // Respond to the HTTP request with the data requested.
     if (req.params.dataToGet === 'allData') {
+      delete data.data // Don't send all carbon calculator data
       res.send(data)
     } else {
       res.send(data[req.params.dataToGet])
@@ -110,7 +111,7 @@ router.get('/logoutRedirect', (req, res) => {
   })
 })
 
-// Logout and return logout url
+// Logout
 router.get('/logout', (req, res) => {
   req.session.destroy(function (err) {
     console.log(err)
