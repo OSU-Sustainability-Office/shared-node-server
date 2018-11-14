@@ -253,7 +253,7 @@ router.get('/stories', (req, res) => {
 router.get('/data', (req, res) => {
   if (req.queryString('startDate') && req.queryString('endDate') && req.queryInt('id') && req.queryString('point')) {
     console.log(req.queryString('startDate'))
-    let q = 'SELECT time, ' + req.queryString('point') + ' FROM data WHERE time >= ? AND time <= ? AND meter_id = ? ORDER BY TIME ASC'
+    let q = 'SELECT time, ' + req.queryString('point') + ' FROM data WHERE time >= ? AND time <= ? AND meter_id = ? and (accumulated_real is not null or total is not null or cubic_feet is not null)  ORDER BY TIME ASC'
     db.query(q, [req.queryString('startDate'), req.queryString('endDate'), req.queryInt('id')]).then(rows => {
       res.send(JSON.stringify(rows))
     }).catch(e => {
