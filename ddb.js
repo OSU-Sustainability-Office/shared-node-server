@@ -94,7 +94,8 @@ exports.getQuestions = function () {
   // AWS SDK DDB Scan Parameters - https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html
   const params = {
     'TableName': 'carbon-calculator-questions',
-    'Limit': 10
+    'Limit': 10,
+    'Select': 'ALL_ATTRIBUTES'
   }
   // Using a promise allows for promise chains.
   return new Promise((resolve, reject) => {
