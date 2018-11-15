@@ -95,7 +95,6 @@ exports.getQuestions = function () {
   const params = {
     'TableName': 'carbon-calculator-questions',
     'Limit': 10
-    }
   }
   // Using a promise allows for promise chains.
   return new Promise((resolve, reject) => {
