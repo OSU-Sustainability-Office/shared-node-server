@@ -47,14 +47,14 @@ router.get('/questions/download', function (req, res) {
 		db.getQuestions().then(categories => {
 			questionsCache.categories = JSON.stringify(categories)
 			questionsCache.timestamp = new Date()
-			res.status(200).send(questionCache.categories) // We store a stringified version
+			res.status(200).send(questionsCache.categories) // We store a stringified version
 		}).catch(e => {
 			console.log(e)
 			res.status(404).send(e)
 		})
 	} else {
 		// Less than 15 minutes has elapsed since the last request. Serve the cached version.
-		res.status(200).send(questionCache.categories) // We store a stringified version
+		res.status(200).send(questionsCache.categories) // We store a stringified version
 	}
 })
 
