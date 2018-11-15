@@ -11,7 +11,7 @@ router.use(function timeLog(req,res,next){
 
 // Carbon Calculator User Routes
 // Download User Data
-router.get('/download', function(req, res) {
+router.get('/download/:dateString', function(req, res) {
 	db.getUser(req.params.UserID).then(data => {
 		res.status(200).send(data.data)
 	}).catch((rej) => {
@@ -50,7 +50,7 @@ router.get('/questions/download', function (req, res) {
 			res.status(200).send(questionCache.categories) // We store a stringified version
 		}).catch(e => {
 			console.log(e)
-			res.status(404).send('Error: DB request failed.')
+			res.status(404).send(e)
 		})
 	} else {
 		// Less than 15 minutes has elapsed since the last request. Serve the cached version.
