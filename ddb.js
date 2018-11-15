@@ -96,10 +96,12 @@ exports.getQuestions = function () {
     'TableName': 'carbon-calculator-questions',
     'Select': 'ALL_ATTRIBUTES',
     'ConsistentRead': true
+
+    }
   }
   // Using a promise allows for promise chains.
   return new Promise((resolve, reject) => {
-    state.ddb.query(params, function (err, data) {
+    state.ddb.scan(params, function (err, data) {
       if (err || data.Items.length === 0) { return reject(err) }
       resolve(data.Items)
     })
