@@ -96,7 +96,6 @@ exports.getQuestions = function () {
     'TableName': 'carbon-calculator-questions',
     'Select': 'ALL_ATTRIBUTES',
     'ConsistentRead': true
-
     }
   }
   // Using a promise allows for promise chains.
