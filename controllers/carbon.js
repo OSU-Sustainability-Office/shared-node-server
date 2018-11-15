@@ -11,7 +11,7 @@ router.use(function timeLog(req,res,next){
 
 // Carbon Calculator User Routes
 // Download User Data
-router.get('/download/:dateString', function(req, res) {
+router.get('/download', function(req, res) {
 	db.getUser(req.params.UserID).then(data => {
 		res.status(200).send(data.data)
 	}).catch((rej) => {
