@@ -94,12 +94,12 @@ exports.getQuestions = function () {
   // AWS SDK DDB Query Parameters - https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#query-property
   const params = {
     'TableName': 'carbon-calculator-questions',
-    'Select': 'ALL_ATTRIBUTES'
-    }
+    'Select': 'ALL_ATTRIBUTES',
+    'ConsistentRead': true
   }
   // Using a promise allows for promise chains.
   return new Promise((resolve, reject) => {
-    state.ddb.scan(params, function (err, data) {
+    state.ddb.query(params, function (err, data) {
       if (err || data.Items.length === 0) { return reject(err) }
       resolve(data.Items)
     })
