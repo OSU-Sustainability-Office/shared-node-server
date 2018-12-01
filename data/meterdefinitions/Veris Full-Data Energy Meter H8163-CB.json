@@ -1,0 +1,21 @@
+{
+  "Energy Consumption" : "accumulated_real",
+  "Real Power" : "real_power",
+  "Reactive Power" : "reactive_power",
+  "Apparent Power" : "apparent_power",
+  "Real Power phase A" : "real_a",
+  "Real Power phase B" : "real_b",
+  "Real Power phase C" : "real_c",
+  "Power Factor phase A" : "pf_a",
+  "Power Factor phase B" : "pf_b",
+  "Power Factor phase C" : "pf_c",
+  "Voltage phase A-B" : "vphase_ab",
+  "Voltage phase B-C" : "vphase_bc",
+  "Voltage phase C-A" : "vphase_ac",
+  "Voltage phase A-N" : "vphase_an",
+  "Voltage phase B_N" : "vphase_bn",
+  "Voltage phase C-N" : "vphase_cn",
+  "Current phase A" : "cphase_a",
+  "Current phase B" : "cphase_b",
+  "Current phase C" : "cphase_c"
+}

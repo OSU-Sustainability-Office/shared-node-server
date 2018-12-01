@@ -1,67 +1,82 @@
-var express = require('express')
-var router = express.Router()
-var xmlparser = require('express-xml-bodyparser')
-var db = require('../db.js')
+const express = require('express')
+const router = express.Router()
+const xmlparser = require('express-xml-bodyparser')
+const db = require('../db.js')
+const fs = require('fs')
 
 // Insert one point
-function insertPoint(record, res, meter_id) {
-
+function insertPoint (record, res, deviceType, meterId) {
   // Format timestamp
-  var d = new Date(record.time._)
-  // d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000)
-  console.log("Inserting meter data into table from: " + d)
-  var year = d.getFullYear()
-  var month = ("0" + (d.getMonth() + 1)).slice(-2) // 2 digit
-  var day = ("0" + d.getDate()).slice(-2)
-  var hour = ("0" + d.getHours()).slice(-2)
-  var min = ("0" + d.getMinutes()).slice(-2)
-  var timestamp = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':00'
+  const d = new Date(record.time._)
+  console.log('Inserting meter data into table from: ' + d)
+  const year = d.getFullYear()
+  const month = ('0' + (d.getMonth() + 1)).slice(-2) // 2 digit
+  const day = ('0' + d.getDate()).slice(-2)
+  const hour = ('0' + d.getHours()).slice(-2)
+  const min = ('0' + d.getMinutes()).slice(-2)
+  const timestamp = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':00'
 
-  var point = record.point
-
-  var query = ""
-  //H6812
-  if (point.length === 72)
-    query = 'INSERT INTO data (meter_id, time, accumulated_real, real_power, reactive_power, apparent_power, real_a, real_b, real_c, reactive_a, reactive_b, reactive_c, apparent_a, apparent_b, apparent_c, pf_a, pf_b, pf_c, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c) VALUES ("' + res[0].id + '","' + timestamp + '",' + point[0].$.value + ',' + point[21].$.value + ',' + point[22].$.value + ',' + point[23].$.value + ',' + point[51].$.value + ',' + point[52].$.value + ',' + point[53].$.value + ',' + point[54].$.value + ',' + point[55].$.value + ',' + point[56].$.value + ',' + point[57].$.value + ',' + point[58].$.value + ',' + point[59].$.value + ',' + point[60].$.value + ',' + point[61].$.value + ',' + point[62].$.value + ',' + point[63].$.value + ',' + point[64].$.value + ',' + point[65].$.value + ',' + point[66].$.value + ',' + point[67].$.value + ',' + point[68].$.value + ',' + point[69].$.value + ',' + point[70].$.value + ',' + point[71].$.value + ')'
-  else if (point.length === 26)
-    query = 'INSERT INTO data (meter_id, time, accumulated_real, real_power, reactive_power, apparent_power, real_a, real_b, real_c, pf_a, pf_b, pf_c, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c) VALUES ("'+ res[0].id + '","' + timestamp +'",'+ point[0].$.value + ',' + point[1].$.value + ',' + point[2].$.value + ',' + point[3].$.value + ',' + point[8].$.value + ',' + point[9].$.value + ',' + point[10].$.value + ',' + point[11].$.value + ',' + point[12].$.value + ','+ point[13].$.value + ',' + point[14].$.value + ',' + point[15].$.value + ',' + point[16].$.value + ',' + point[17].$.value + ',' + point[18].$.value + ',' + point[19].$.value + ',' + point[20].$.value + ','+ point[21].$.value + ',' + point[22].$.value + ')'
-  else if (point.length === 15)
-    query = 'INSERT INTO data (meter_id, time, accumulated_real, real_power, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c) VALUES ("' + res[0].id + '","' + timestamp + '",' + point[5].$.value + ',' + point[4].$.value + ',' + point[9].$.value + ',' + point[10].$.value + ',' + point[11].$.value + ',' + point[12].$.value + ',' + point[13].$.value + ',' + point[14].$.value + ',' + point[0].$.value + ',' + point[1].$.value + ',' + point[2].$.value + ')'
-  //Steam meter
-  else if (point.length === 4)
-    query = 'INSERT INTO data (meter_id, time, input, total, minimum, maximum) VALUES ("' + res[0].id + '","' + timestamp + '",' + point[0].$.value + "," + point[1].$.value + "," + point[2].$.value + "," + point[3].$.value + ')'
-  else if (point.length === 47)
-    query = 'INSERT INTO data (meter_id, time, accumulated_real, real_power, reactive_power, apparent_power, real_a, real_b, real_c, reactive_a, reactive_b, reactive_c, apparent_a, apparent_b, apparent_c, pf_a, pf_b, pf_c, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c) VALUES ("' + res[0].id + '","' + timestamp + '",' + point[0].$.value + ',' + point[42].$.value + ',' + point[43].$.value + ',' + point[41].$.value+ ',' + point[22].$.value + ',' + point[23].$.value + ',' + point[24].$.value + ',' + point[25].$.value + ',' + point[26].$.value + ',' + point[27].$.value + ',' + point[19].$.value + ',' + point[20].$.value + ',' + point[21].$.value + ',' + point[28].$.value + ',' + point[29].$.value + ',' + point[30].$.value + ',' + point[13].$.value + ',' + point[14].$.value + ',' + point[15].$.value + ',' + point[10].$.value + ',' + point[11].$.value + ',' + point[12].$.value + ',' + point[16].$.value + ',' + point[17].$.value + ',' + point[18].$.value + ')'
-  //gas meter
-  else if (point.length === 10)
-    query = "INSERT INTO data (meter_id, time, cubic_feet, instant, minimum, maximum, rate) VALUES ('"+ res[0].id+"','" + timestamp + "'," + point[0].$.value + ',' + point[2].$.value +','+ point[3].$.value + ',' + point[4].$.value + ',' + point[1].$.value + ')'
-  //h8036
-  else if (point.length === 13)
-    query = 'INSERT INTO data (meter_id, time, accumulated_real, real_power, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c) VALUES ("' + res[0].id +'","'+timestamp + '",' + point[11].$.value + ',' + point[10].$.value + ',' + point[4].$.value + ',' + point[6].$.value + ',' + point[8].$.value + ',' + point[5].$.value + ',' + point[7].$.value + ',' + point[9].$.value + ',' + point[0].$.value + ',' + point[1].$.value + ',' + point[2].$.value + ')'
-  else if (point.length === 29)
-    query = 'INSERT INTO data (meter_id, time, accumulated_real, real_power, reactive_power, apparent_power, real_a, real_b, real_c, pf_a, pf_b, pf_c, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c) VALUES ("' + res[0].id + '","' + timestamp + '",' + point[0].$.value + ',' + point[1].$.value + ',' + point[2].$.value + ',' + point[3].$.value+ ',' + point[8].$.value + ',' + point[9].$.value + ',' + point[10].$.value + ',' + point[11].$.value + ',' + point[12].$.value + ',' + point[13].$.value + ',' + point[14].$.value + ',' + point[15].$.value + ',' + point[16].$.value + ',' + point[17].$.value + ',' + point[18].$.value + ',' + point[19].$.value + ',' + point[20].$.value + ',' + point[21].$.value + ',' + point[22].$.value + ')'
-  if(query !== "")
-    db.query(query)
+  const pointMap = {
+    accumulated_real: null,
+    real_power: null,
+    reactive_power: null,
+    apparent_power: null,
+    real_a: null,
+    real_b: null,
+    real_c: null,
+    reactive_a: null,
+    reactive_b: null,
+    reactive_c: null,
+    apparent_a: null,
+    apparent_b: null,
+    apparent_c: null,
+    pf_a: null,
+    pf_b: null,
+    pf_c: null,
+    vphase_ab: null,
+    vphase_bc: null,
+    vphase_ac: null,
+    vphase_an: null,
+    vphase_bn: null,
+    vphase_cn: null,
+    cphase_a: null,
+    cphase_b: null,
+    cphase_c: null,
+    total: null,
+    input: null,
+    minimum: null,
+    maximum: null,
+    cubic_feet: null,
+    instant: null,
+    rate: null,
+    default: null
+  }
+  fs.readFile('./data/meterdefinitions/' + deviceType + '.json', (err, data) => {
+    if (err) {
+      return
+    }
+    const nameMap = JSON.parse(data)
+    for (let point of record.point) {
+      pointMap[nameMap[point.$.name] || 'default'] = point.$.value
+    }
+    db.query('INSERT INTO data_test (meter_id, time, accumulated_real, real_power, reactive_power, apparent_power, real_a, real_b, real_c, reactive_a, reactive_b, reactive_c, apparent_a, apparent_b, apparent_c, pf_a, pf_b, pf_c, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c, total, input, minimum, maximum, cubic_feet, instant, rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [res[0].id, timestamp, pointMap.accumulated_real, pointMap.real_power, pointMap.reactive_power, pointMap.apparent_power, pointMap.real_a, pointMap.real_b, pointMap.real_c, pointMap.reactive_a, pointMap.reactive_b, pointMap.reactive_c, pointMap.apparent_a, pointMap.apparent_b, pointMap.apparent_c, pointMap.pf_a, pointMap.pf_b, pointMap.pf_c, pointMap.vphase_ab, pointMap.vphase_bc, pointMap.vphase_ac, pointMap.vphase_an, pointMap.vphase_bn, pointMap.vphase_cn, pointMap.cphase_a, pointMap.cphase_b, pointMap.cphase_c, pointMap.total, pointMap.input, pointMap.minimum, pointMap.maximum, pointMap.cubic_feet, pointMap.instant, pointMap.rate])
+  })
 }
 
 // Inserts a record if it is a 15 minute interval point
-function insertRecord(record, res, meter_id) {
+function insertRecord(record, res, deviceType, meter_id) {
   // Check to see if the point is 15 minute data
   if (record.time._.substring(14, 16) % 15 == 0) {
     // Now, add temp data.
     // In the event that a meter was created, res[0] is null, so we need to query for the meter's id again.
-    if (record.point.length !== 72 && record.point.length !== 26 && record.point.length !== 15 && record.point.length !== 4 && record.point.length !== 47  && record.point.length !== 10  && record.point.length !== 13  && record.point.length !== 29)
-      for (var i  = 0; i < record.point.length; i++)
-        console.log(record.point[i])
-  //  console.log(record)
 
     if (res[0]) {
-       insertPoint(record, res, meter_id)
+       insertPoint(record, res, deviceType, meter_id)
     } else {
       // Query again.
       db.query('SELECT id FROM meters WHERE address = "' + meter_id + '"', function(err, res) {
         if (err) throw err
-        insertPoint(record, res, meter_id)
+        insertPoint(record, res, deviceType, meter_id)
       })
     }
   } else {
@@ -76,11 +91,11 @@ function iterateRecords(device, res, meter_id) {
   if (device.records.record.length != null) {
     // Iterate over each record, and insert it
     for (var i = 0; i < device.records.record.length; i++) {
-      insertRecord(device.records.record[i], res, meter_id)
+      insertRecord(device.records.record[i], res, device.type, meter_id)
     }
   } else {
     // Insert the only record
-    insertRecord(device.records.record, res, meter_id)
+    insertRecord(device.records.record, res, device.type, meter_id)
   }
 }
 

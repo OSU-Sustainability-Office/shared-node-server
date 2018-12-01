@@ -1,0 +1,13 @@
+{
+  "Real Energy Consumption" : "accumulated_real",
+  "Real Power Total" : "real_power",
+  "Voltage A-B" : "vphase_ab",
+  "Voltage B-C" : "vphase_bc",
+  "Voltage C-A" : "vphase_ac",
+  "Voltage A-N" : "vphase_an",
+  "Voltage B-N" : "vphase_bn",
+  "Voltage C-N" : "vphase_cn",
+  "Current Phase A" : "cphase_a",
+  "Current Phase B" : "cphase_b",
+  "Current Phase C" : "cphase_c",
+}
