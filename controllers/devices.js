@@ -62,33 +62,24 @@ function insertPoint (record, res, deviceType, meterId) {
     for (let point of record.point) {
       pointMap[nameMap[point.$.name] || 'default'] = point.$.value
     }
-    db.query('INSERT INTO data (meter_id, time, accumulated_real, real_power, reactive_power, apparent_power, real_a, real_b, real_c, reactive_a, reactive_b, reactive_c, apparent_a, apparent_b, apparent_c, pf_a, pf_b, pf_c, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c, total, input, minimum, maximum, cubic_feet, instant, rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [res[0].id, timestamp, pointMap.accumulated_real, pointMap.real_power, pointMap.reactive_power, pointMap.apparent_power, pointMap.real_a, pointMap.real_b, pointMap.real_c, pointMap.reactive_a, pointMap.reactive_b, pointMap.reactive_c, pointMap.apparent_a, pointMap.apparent_b, pointMap.apparent_c, pointMap.pf_a, pointMap.pf_b, pointMap.pf_c, pointMap.vphase_ab, pointMap.vphase_bc, pointMap.vphase_ac, pointMap.vphase_an, pointMap.vphase_bn, pointMap.vphase_cn, pointMap.cphase_a, pointMap.cphase_b, pointMap.cphase_c, pointMap.total, pointMap.input, pointMap.minimum, pointMap.maximum, pointMap.cubic_feet, pointMap.instant, pointMap.rate])
-    db.query('SELECT * FROM alerts WHERE meter_id = ?', [res[0].id]).then(r => {
+    db.query('INSERT INTO data_test (meter_id, time, accumulated_real, real_power, reactive_power, apparent_power, real_a, real_b, real_c, reactive_a, reactive_b, reactive_c, apparent_a, apparent_b, apparent_c, pf_a, pf_b, pf_c, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c, total, input, minimum, maximum, cubic_feet, instant, rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [res[0].id, timestamp, pointMap.accumulated_real, pointMap.real_power, pointMap.reactive_power, pointMap.apparent_power, pointMap.real_a, pointMap.real_b, pointMap.real_c, pointMap.reactive_a, pointMap.reactive_b, pointMap.reactive_c, pointMap.apparent_a, pointMap.apparent_b, pointMap.apparent_c, pointMap.pf_a, pointMap.pf_b, pointMap.pf_c, pointMap.vphase_ab, pointMap.vphase_bc, pointMap.vphase_ac, pointMap.vphase_an, pointMap.vphase_bn, pointMap.vphase_cn, pointMap.cphase_a, pointMap.cphase_b, pointMap.cphase_c, pointMap.total, pointMap.input, pointMap.minimum, pointMap.maximum, pointMap.cubic_feet, pointMap.instant, pointMap.rate])
+    db.query('SELECT * FROM alerts WHERE meter_id = ?', [res[0].id]).then(async r => {
       for (let alert of r) {
         if (pointMap[alert.point] >= alert.threshold) {
           // email user
-          //Query for user email and get the template html from file
+
+          let metername = await db.query('SELECT name FROM meters WHERE id = ?', [res[0].id])
+          let buildingname = await db.query('SELECT meter_groups.name FROM meter_group_relation LEFT JOIN meter_groups ON meter_group_relation.group_id = meter_groups.id WHERE meter_group_relation.meter_id = ?', [res[0].id])
+          let username = await db.query('SELECT name FROM users WHERE id = ?', [alert.user_id])
           var params = {
+            Source: 'dashboardalerts@sustainability.oregonstate.edu',
+            Template: 'Alert_Template',
             Destination: {
-              ToAddresses: [
-                'brogan.miner@oregonstate.edu'
-              ]
+              ToAddresses: [ username[0].name + '@oregonstate.edu' ]
             },
-            Message: {
-              Body: {
-                Html: {
-                  Charset: 'UTF-8',
-                  Data: 'HTML_FORMAT_BODY'
-                }
-              },
-              Subject: {
-                Charset: 'UTF-8',
-                Data: 'Alert - '
-              }
-            },
-            Source: 'dashboardalerts@sustainability.oregonstate.edu'
+            TemplateData: '{ "building_name" : "' + buildingname[0].name + '", "meter_name" : "' + metername[0].name + '", "meter_point" : "' + alert.point + '", "threshold_value" : "' + alert.threshold + '", "current_value" : "' + pointMap[alert.point] + '"}'
           }
-          new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(params).promise().catch(e => {
+          new AWS.SES({apiVersion: '2010-12-01'}).sendTemplatedEmail(params).promise().catch(e => {
             console.log(e)
           })
         }
