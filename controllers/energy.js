@@ -296,6 +296,10 @@ router.get('/metersbybuilding', function (req, res) {
   })
 })
 
+router.get('/meterPoints', function (req, res) {
+
+})
+
 router.get('/alerts', function (req, res) {
   if (req.session.user && req.session.user.id) {
     db.query('SELECT Q2.point AS point, Q2.threshold AS threshold, Q2.id AS id, Q2.meter_name AS meter_name, meter_groups.name AS building_name FROM (SELECT Q1.point AS point, Q1.threshold AS threshold, Q1.name AS meter_name, Q1.id AS id, meter_group_relation.group_id as group_id  FROM (SELECT alerts.point AS point, alerts.threshold AS threshold, meters.id AS meter_id, alerts.id AS id, meters.name AS name FROM alerts LEFT JOIN meters ON alerts.meter_id = meters.id WHERE alerts.user_id = ?) AS Q1 LEFT JOIN meter_group_relation ON Q1.meter_id = meter_group_relation.meter_id) AS Q2 LEFT JOIN meter_groups ON Q2.group_id = meter_groups.id', [req.session.user.id]).then(r => {
@@ -309,9 +313,21 @@ router.get('/alerts', function (req, res) {
 })
 
 router.post('/alert', function (req, res) {
-  if (req.session.user && req.session.user.id && req.session.user.privilige >= 2) {
+  if (req.session.user && req.session.user.id && req.session.user.privilege >= 2) {
     db.query('INSERT INTO alerts (user_id, meter_id) VALUES (?, ?)', [req.session.user.id, req.bodyString('meter_id')]).then(r => {
       res.status(201).send(JSON.stringify({ id: r.insertId }))
+    }).catch(e => {
+      res.status(400).send('400: ' + e.message)
+    })
+  } else {
+    res.status(403).send('403: NOT AUTHORIZED')
+  }
+})
+
+router.delete('/alert', function (req, res) {
+  if (req.session.user && req.session.user.id) {
+    db.query('DELETE alerts FROM alerts WHERE user_id = ? AND id = ?', [req.session.user.id, req.bodyInt('id')]).then(r => {
+      res.status(204).send()
     }).catch(e => {
       res.status(400).send('400: ' + e.message)
     })
