@@ -62,7 +62,7 @@ function insertPoint (record, res, deviceType, meterId) {
     for (let point of record.point) {
       pointMap[nameMap[point.$.name] || 'default'] = point.$.value
     }
-    db.query('INSERT INTO data_test (meter_id, time, accumulated_real, real_power, reactive_power, apparent_power, real_a, real_b, real_c, reactive_a, reactive_b, reactive_c, apparent_a, apparent_b, apparent_c, pf_a, pf_b, pf_c, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c, total, input, minimum, maximum, cubic_feet, instant, rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [res[0].id, timestamp, pointMap.accumulated_real, pointMap.real_power, pointMap.reactive_power, pointMap.apparent_power, pointMap.real_a, pointMap.real_b, pointMap.real_c, pointMap.reactive_a, pointMap.reactive_b, pointMap.reactive_c, pointMap.apparent_a, pointMap.apparent_b, pointMap.apparent_c, pointMap.pf_a, pointMap.pf_b, pointMap.pf_c, pointMap.vphase_ab, pointMap.vphase_bc, pointMap.vphase_ac, pointMap.vphase_an, pointMap.vphase_bn, pointMap.vphase_cn, pointMap.cphase_a, pointMap.cphase_b, pointMap.cphase_c, pointMap.total, pointMap.input, pointMap.minimum, pointMap.maximum, pointMap.cubic_feet, pointMap.instant, pointMap.rate])
+    db.query('INSERT INTO data (meter_id, time, accumulated_real, real_power, reactive_power, apparent_power, real_a, real_b, real_c, reactive_a, reactive_b, reactive_c, apparent_a, apparent_b, apparent_c, pf_a, pf_b, pf_c, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c, total, input, minimum, maximum, cubic_feet, instant, rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [res[0].id, timestamp, pointMap.accumulated_real, pointMap.real_power, pointMap.reactive_power, pointMap.apparent_power, pointMap.real_a, pointMap.real_b, pointMap.real_c, pointMap.reactive_a, pointMap.reactive_b, pointMap.reactive_c, pointMap.apparent_a, pointMap.apparent_b, pointMap.apparent_c, pointMap.pf_a, pointMap.pf_b, pointMap.pf_c, pointMap.vphase_ab, pointMap.vphase_bc, pointMap.vphase_ac, pointMap.vphase_an, pointMap.vphase_bn, pointMap.vphase_cn, pointMap.cphase_a, pointMap.cphase_b, pointMap.cphase_c, pointMap.total, pointMap.input, pointMap.minimum, pointMap.maximum, pointMap.cubic_feet, pointMap.instant, pointMap.rate])
     db.query('SELECT * FROM alerts WHERE meter_id = ?', [res[0].id]).then(async r => {
       for (let alert of r) {
         if (pointMap[alert.point] >= alert.threshold) {
@@ -131,16 +131,19 @@ var insertData = function insertData(device, serial) {
   // Check if the meter exists. If yes, insert the data into temp. If
   // no, then insert the meter into the meters table before adding the
   // temp data.
-  db.query('SELECT id FROM meters WHERE address = "' + meter_id + '"', function(err, res) {
+  db.query('SELECT id, device_type FROM meters WHERE address = "' + meter_id + '"', function(err, res) {
     if (err) throw err
     // if none found, insert
-    if (res.length == 0) {
-      console.log("Creating new meter: " + meter_id)
-      db.query('INSERT INTO meters (name, address) VALUES ("' + device.name + '","' + meter_id + '")', function (err, res) {
+    if (res.length === 0) {
+      console.log('Creating new meter: ' + meter_id)
+      db.query('INSERT INTO meters (name, address, device_type) VALUES ("' + device.name + '","' + meter_id + '","' + device.type + '")', function (err, res) {
         if (err) throw err
         iterateRecords(device, res, meter_id)
       })
     } else {
+      if (!res[0].device_type) {
+        db.query('UPDATE meters SET device_type = ? WHERE id = ?', [device.type, res[0].id])
+      }
       iterateRecords(device, res, meter_id)
     }
   })
