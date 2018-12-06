@@ -32,6 +32,7 @@
     "mongoose": "^5.1.1",
     "morgan": "^1.9.0",
     "mysql": "^2.16.0",
+    "nodemailer": "^4.7.0",
     "nodemon": "^1.18.3",
     "requestify": "^0.2.5",
     "sanitize": "^2.1.0",

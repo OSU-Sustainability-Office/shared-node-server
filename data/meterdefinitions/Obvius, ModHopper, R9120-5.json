@@ -1,0 +1,7 @@
+{
+  "Natural Gas" : "total",
+  "Natural Gas Rate" : "rate",
+  "Natural Gas Instantaneous" : "instant",
+  "Natural Gas Min" : "minimum",
+  "Natural Gas Max" : "maximum",
+}

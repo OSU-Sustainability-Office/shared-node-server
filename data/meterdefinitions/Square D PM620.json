@@ -1,0 +1,13 @@
+{
+  "Real Energy 3-Phase Total" : "accumulated_real",
+  "Real Power 3-Phase Total" : "real_power",
+  "Volts A-B" : "vphase_ab",
+  "Volts B-C" : "vphase_bc",
+  "Volts C-A" : "vphase_ac",
+  "Volts A-N" : "vphase_an",
+  "Volts B-N" : "vphase_bn",
+  "Volts C-N" : "vphase_cn",
+  "Current Phase A" : "cphase_a",
+  "Current Phase B" : "cphase_b",
+  "Current Phase C" : "cphase_c"
+}
