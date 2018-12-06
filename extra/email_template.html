@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Dashboard Alert</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style type='text/css'>
+    @media screen {
+      @font-face {
+        font-family: 'StratumNo2';
+        font-style: Bold;
+        font-weight: 400;
+        src: local('StratumNo2-Bold'), url(https://dashboard.sustainability.oregonstate.edu/static/fonts/StratumNo2-Bold.woff2) format('woff2');
+      }
+      @font-face {
+        font-family: 'Open Sans';
+        font-style: normal;
+        font-weight: 400;
+        src: local('Open Sans'), url(https://fonts.gstatic.com/s/opensans/v13/cJZKeOuBrn4kERxqtaUH3ZBw1xU1rKptJj_0jans920.woff2) format('woff2');
+      }
+    }
+    </style>
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #3A3A3A;">
+    <table border="1" cellpadding="0" cellspacing="0" width="800px" align='center' border='0' style='border: solid 1px #1A1A1A; background-color: #FFFFFF;'>
+        <tr style='height: 120px; background-color: #D73F09; border: none;'>
+          <td style='border: none;'>
+            <img src='https://dashboard.sustainability.oregonstate.edu/static/images/logo.png' style='height: 100px; width: auto; padding: 5px;'/>
+          </td>
+        </tr>
+        <tr style='border: none;'>
+          <td style='background-color: #1A1A1A; color: #FFFFFF; font-family: "StratumNo2"; padding: 10px; font-size: 30px; border: none;'>
+            DASHBOARD ALERT
+          </td>
+        </tr>
+        <tr style='border: none; height: 600px;'>
+          <td style='border: none; font-family: "Open Sans"; font-size: 20px; text-align: center; padding: 25px;'>
+            <span style='font-family: "StratumNo2"; font-size: 25px;'>Attention:</span> Your alert for {{ building_name }} was triggered. The {{ meter_point }} of {{ meter_name }} exceded your threshold value of {{ threshold_value }} with a value of {{ current_value }}.
+          </td>
+        </tr>
+        <tr style='border: none;'>
+          <td style='border: none; font-family: "Open Sans";  padding: 15px;'>
+            This alert status was triggered automatically. To alter your alert settings visit the <a href='https://dashboard.sustainability.oregonstate.edu/#/dashboard/alerts'>alerts settings page</a> in the OSU <a href='https://dashboard.sustainability.oregonstate.edu/'>Energy Dashboard</a>
+          </td>
+        </tr>
+    </table>
+  </body>
+</html>
