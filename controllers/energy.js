@@ -66,15 +66,15 @@ router.get('/story', (req, res) => {
       let rObj = r[0][0]
       rObj.blocks = r[1]
       // Fix for wrong timezone should not be for loop....
-      for (let b of rObj.blocks) {
-        let ds = new Date(b.date_start)
-        // ds.setTime(ds.getTime() - ds.getTimezoneOffset() * 60 * 1000)
-        b.date_start = ds.toISOString()
-
-        let de = new Date(b.date_end)
-        // de.setTime(de.getTime() - de.getTimezoneOffset() * 60 * 1000)
-        b.date_end = de.toISOString()
-      }
+      // for (let b of rObj.blocks) {
+      //   let ds = new Date(b.date_start)
+      //   // ds.setTime(ds.getTime() - ds.getTimezoneOffset() * 60 * 1000)
+      //   b.date_start = ds.toISOString()
+      //
+      //   let de = new Date(b.date_end)
+      //   // de.setTime(de.getTime() - de.getTimezoneOffset() * 60 * 1000)
+      //   b.date_end = de.toISOString()
+      // }
       rObj.openCharts = r[2]
       rObj.openMeters = r[3]
       res.send(JSON.stringify(rObj))
@@ -212,9 +212,21 @@ router.get('/user', function (req, res) {
     res.send(JSON.stringify({ name: req.session.user.name, privilege: req.session.user.privilige, id: req.session.user.id }))
   } else if (req.session.UserID) {
     db.query('SELECT * from users WHERE name=?', [req.session.UserID]).then(r => {
-      req.session.user = r[0]
-      console.log(r)
-      res.send(JSON.stringify(req.session.user))
+      if (r.length <= 0) {
+        db.query('INSERT INTO users (name, privilege) VALUES (?, 1)', [req.session.UserID]).then(r => {
+          req.session.user = {
+            name: req.session.UserID,
+            id: r.insertId,
+            privilege: 1
+          }
+          res.send(JSON.stringify(req.session.user))
+        }).catch(e => {
+          res.status(400).send('400: ' + e.message)
+        })
+      } else {
+        req.session.user = r[0]
+        res.send(JSON.stringify(req.session.user))
+      }
     }).catch(e => {
       res.status(400).send('400: ' + e.message)
     })
@@ -276,6 +288,37 @@ router.get('/meters', function (req, res) {
   }
 })
 
+router.get('/metersbybuilding', function (req, res) {
+  db.query('SELECT Q1.name AS building_name, meters.id AS id, meters.name AS meter_name FROM (SELECT meter_groups.name, meter_group_relation.meter_id FROM meter_groups RIGHT JOIN meter_group_relation ON meter_groups.id = meter_group_relation.group_id) AS Q1 LEFT JOIN meters ON meters.id = Q1.meter_id ORDER BY building_name ASC').then(rows => {
+    res.send(JSON.stringify(rows))
+  }).catch(err => {
+    res.status(400).send('400: ' + err.message)
+  })
+})
+
+router.get('/alerts', function (req, res) {
+  if (req.session.user && req.session.user.id) {
+    db.query('SELECT Q2.point AS point, Q2.threshold AS threshold, Q2.id AS id, Q2.meter_name AS meter_name, meter_groups.name AS building_name FROM (SELECT Q1.point AS point, Q1.threshold AS threshold, Q1.name AS meter_name, Q1.id AS id, meter_group_relation.group_id as group_id  FROM (SELECT alerts.point AS point, alerts.threshold AS threshold, meters.id AS meter_id, alerts.id AS id, meters.name AS name FROM alerts LEFT JOIN meters ON alerts.meter_id = meters.id WHERE alerts.user_id = ?) AS Q1 LEFT JOIN meter_group_relation ON Q1.meter_id = meter_group_relation.meter_id) AS Q2 LEFT JOIN meter_groups ON Q2.group_id = meter_groups.id', [req.session.user.id]).then(r => {
+      res.send(JSON.stringify(r))
+    }).catch(e => {
+      res.status(400).send('400: ' + e.message)
+    })
+  } else {
+    res.status(403).send('403: NOT LOGGED IN')
+  }
+})
+
+router.post('/alert', function (req, res) {
+  if (req.session.user && req.session.user.id && req.session.user.privilige >= 2) {
+    db.query('INSERT INTO alerts (user_id, meter_id) VALUES (?, ?)', [req.session.user.id, req.bodyString('meter_id')]).then(r => {
+      res.status(201).send(JSON.stringify({ id: r.insertId }))
+    }).catch(e => {
+      res.status(400).send('400: ' + e.message)
+    })
+  } else {
+    res.status(403).send('403: NOT AUTHORIZED')
+  }
+})
 // Photos
 router.get('/media', function (req, res) {
   fs.readdir('data/energydashboard/images/', (e, files) => {
