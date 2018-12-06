@@ -9,5 +9,5 @@
   "Voltage C-N" : "vphase_cn",
   "Current Phase A" : "cphase_a",
   "Current Phase B" : "cphase_b",
-  "Current Phase C" : "cphase_c",
+  "Current Phase C" : "cphase_c"
 }
