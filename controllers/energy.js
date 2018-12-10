@@ -261,7 +261,7 @@ router.get('/stories', (req, res) => {
     res.status(400).send('400: ' + e.message)
   })
 })
-
+// METERS AND DATA
 router.get('/data', (req, res) => {
   if (req.queryString('startDate') && req.queryString('endDate') && req.queryInt('id') && req.queryString('point')) {
     console.log(req.queryString('startDate'))
@@ -326,13 +326,25 @@ router.get('/alerts', function (req, res) {
 
 router.post('/alert', function (req, res) {
   if (req.session.user && req.session.user.id && req.session.user.privilege >= 2) {
-    db.query('INSERT INTO alerts (user_id, meter_id) VALUES (?, ?)', [req.session.user.id, req.bodyString('meter_id')]).then(r => {
+    db.query('INSERT INTO alerts (user_id, meter_id, point, threshold) VALUES (?, ?, ?, ?)', [req.session.user.id, req.bodyString('meter_id'), req.bodyString('point'), req.bodyInt('threshold')]).then(r => {
       res.status(201).send(JSON.stringify({ id: r.insertId }))
     }).catch(e => {
       res.status(400).send('400: ' + e.message)
     })
   } else {
     res.status(403).send('403: NOT AUTHORIZED')
+  }
+})
+
+router.put('/alert', function (req, res) {
+  if (req.session.user && req.session.user.id && req.bodyInt('id')) {
+    db.query('UPDATE alerts SET point = ?, threshold = ? WHERE id = ? AND user_id = ?', [req.bodyString('point'), req.bodyInt('threshold'), req.bodyInt('id'), req.session.user.id]).then(r => {
+      res.status(204).send()
+    }).catch(e => {
+      res.status(400).send('400: ' + e.message)
+    })
+  } else {
+    res.status(400).send('400: NO ID OR NOT LOGGED IN')
   }
 })
 
