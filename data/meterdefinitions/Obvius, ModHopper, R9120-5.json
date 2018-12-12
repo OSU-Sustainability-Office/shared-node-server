@@ -1,5 +1,5 @@
 {
-  "Natural Gas" : "total",
+  "Natural Gas" : "cubic_feet",
   "Natural Gas Rate" : "rate",
   "Natural Gas Instantaneous" : "instant",
   "Natural Gas Min" : "minimum",
