@@ -160,6 +160,7 @@ router.post('/upload', xmlparser({
 }), function (req, res) {
     if (req.body.das && req.body.das.mode == 'LOGFILEUPLOAD') {
         var serial = req.body.das.serial
+        console.log(req.body)
         console.log('Received XML data from ' + serial + ' on: ' + new Date().toUTCString())
 
         // If multiple meters are connected, device is an array. Check for
