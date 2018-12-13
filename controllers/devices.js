@@ -3,7 +3,7 @@
  * @Date:   2018-09-24T12:16:44-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-13T15:34:45-08:00
+ * @Last modified time: 2018-12-13T15:49:36-08:00
  */
 
 const express = require('express')
@@ -262,6 +262,20 @@ async function populateDB (meterID, cols, deviceClass) {
 }
 
 router.post('/test', upload.single('LOGFILE'), async function (req, res) {
+  if (req.body.MODE !== 'LOGFILEUPLOAD') {
+    res.status('200')
+    res.set({
+      'content-type': 'text/xml',
+      'db': 'close'
+    })
+    res.send(
+      '<?xml version="1.0" encoding="UTF-8" ?>\n' +
+      '<result>SUCCESS</result>\n' +
+      '<DAS></DAS>' +
+      '</xml>'
+    )
+    return
+  }
   try {
     if (req.file && req.body.PASSWORD === process.env.ACQUISUITE_PASS) {
       let meterID = await getMeter(req.body.SERIALNUMBER, req.body.MODBUSDEVICE)
