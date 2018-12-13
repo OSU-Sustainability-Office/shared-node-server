@@ -1,3 +1,11 @@
+/**
+ * @Author: Brogan Miner <Brogan>
+ * @Date:   2018-09-24T12:16:44-07:00
+ * @Email:  brogan.miner@oregonstate.edu
+ * @Last modified by:   Brogan
+ * @Last modified time: 2018-12-13T15:34:45-08:00
+ */
+
 const express = require('express')
 const router = express.Router()
 const xmlparser = require('express-xml-bodyparser')
@@ -7,6 +15,8 @@ const AWS = require('aws-sdk')
 require('dotenv').config()
 const multer = require('multer')
 const upload = multer()
+const zlib = require('zlib')
+const meterdefinitions = require('../data/meterdefinitions/all.js')
 AWS.config.update({region: 'us-west-2'})
 
 // Insert one point
@@ -154,9 +164,147 @@ var insertData = function insertData(device, serial) {
   })
 }
 
-router.post('/test', upload.none(), function (req, res) {
-  console.log(JSON.stringify(req.body))
-  res.send()
+async function getMeter (serial, device, name, deviceClass) {
+  let q = await db.query('SELECT id FROM meters WHERE address = ?', [serial + '-' + device])
+  let r
+  if (q.length === 0) {
+    let i = await db.query('INSERT INTO meters (name, address, class) VALUES (?, ?, ?)', [name, serial + '-' + device, deviceClass])
+    r = i.insertId
+  } else {
+    r = q[0]
+  }
+  return r
+}
+
+function checkTimeInterval (time) {
+  if (time.substring(14, 16) % 15 === 0) {
+    return true
+  } else {
+    return false
+  }
+}
+
+async function checkAlerts (points, meterID) {
+  let alerts = await db.query('SELECT * FROM alerts WHERE meter_id = ?', [meterID])
+  for (let alert of alerts) {
+    if (!points[alert.point]) {
+      continue
+    }
+    if (points[alert.point] >= alert.threshold) {
+      // email user
+      let metername = await db.query('SELECT name FROM meters WHERE id = ?', [meterID])
+      let buildingname = await db.query('SELECT meter_groups.name FROM meter_group_relation LEFT JOIN meter_groups ON meter_group_relation.group_id = meter_groups.id WHERE meter_group_relation.meter_id = ?', [meterID])
+      let username = await db.query('SELECT name FROM users WHERE id = ?', [alert.user_id])
+      var params = {
+        Source: 'dashboardalerts@sustainability.oregonstate.edu',
+        Template: 'Alert_Template',
+        Destination: {
+          ToAddresses: [ username[0].name + '@oregonstate.edu' ]
+        },
+        TemplateData: '{ "building_name" : "' + buildingname[0].name + '", "meter_name" : "' + metername[0].name + '", "meter_point" : "' + alert.point + '", "threshold_value" : "' + alert.threshold + '", "current_value" : "' + points[alert.point] + '"}'
+      }
+      new AWS.SES({apiVersion: '2010-12-01'}).sendTemplatedEmail(params).promise().catch(e => {
+        console.log(e)
+      })
+    }
+  }
+}
+
+async function populateDB (meterID, cols, deviceClass) {
+  const timestamp = cols[0].substring(0, 16) + ':00'
+
+  const pointMap = {
+    accumulated_real: null,
+    real_power: null,
+    reactive_power: null,
+    apparent_power: null,
+    real_a: null,
+    real_b: null,
+    real_c: null,
+    reactive_a: null,
+    reactive_b: null,
+    reactive_c: null,
+    apparent_a: null,
+    apparent_b: null,
+    apparent_c: null,
+    pf_a: null,
+    pf_b: null,
+    pf_c: null,
+    vphase_ab: null,
+    vphase_bc: null,
+    vphase_ac: null,
+    vphase_an: null,
+    vphase_bn: null,
+    vphase_cn: null,
+    cphase_a: null,
+    cphase_b: null,
+    cphase_c: null,
+    total: null,
+    input: null,
+    minimum: null,
+    maximum: null,
+    cubic_feet: null,
+    instant: null,
+    rate: null,
+    default: null
+  }
+
+  const map = meterdefinitions[deviceClass]
+  if (!map) throw new Error('Device is not defined')
+
+  for (let key of Object.keys(map)) {
+    pointMap[map[key]] = cols[key]
+  }
+
+  checkAlerts(pointMap, meterID)
+
+  return db.query('INSERT INTO data_test (meter_id, time, accumulated_real, real_power, reactive_power, apparent_power, real_a, real_b, real_c, reactive_a, reactive_b, reactive_c, apparent_a, apparent_b, apparent_c, pf_a, pf_b, pf_c, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c, total, input, minimum, maximum, cubic_feet, instant, rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [meterID, timestamp, pointMap.accumulated_real, pointMap.real_power, pointMap.reactive_power, pointMap.apparent_power, pointMap.real_a, pointMap.real_b, pointMap.real_c, pointMap.reactive_a, pointMap.reactive_b, pointMap.reactive_c, pointMap.apparent_a, pointMap.apparent_b, pointMap.apparent_c, pointMap.pf_a, pointMap.pf_b, pointMap.pf_c, pointMap.vphase_ab, pointMap.vphase_bc, pointMap.vphase_ac, pointMap.vphase_an, pointMap.vphase_bn, pointMap.vphase_cn, pointMap.cphase_a, pointMap.cphase_b, pointMap.cphase_c, pointMap.total, pointMap.input, pointMap.minimum, pointMap.maximum, pointMap.cubic_feet, pointMap.instant, pointMap.rate])
+}
+
+router.post('/test', upload.single('LOGFILE'), async function (req, res) {
+  try {
+    if (req.file && req.body.PASSWORD === process.env.ACQUISUITE_PASS) {
+      let meterID = await getMeter(req.body.SERIALNUMBER, req.body.MODBUSDEVICE)
+      zlib.unzip(req.file.buffer, async (error, result) => {
+        if (error) throw error
+        const table = result.toString('ascii').split('\n')
+        let promises = []
+        for (let entry of table) {
+          let cols = entry.split(',')
+          if (!checkTimeInterval(cols[0])) {
+            continue
+          } else {
+            promises.push(populateDB(meterID, cols, req.body.MODBUSDEVICECLASS))
+          }
+        }
+        await Promise.all(promises)
+        res.status('200')
+        res.set({
+          'content-type': 'text/xml',
+          'db': 'close'
+        })
+        res.send(
+          '<?xml version="1.0" encoding="UTF-8" ?>\n' +
+          '<result>SUCCESS</result>\n' +
+          '<DAS></DAS>' +
+          '</xml>'
+        )
+      })
+    } else {
+      throw new Error('File not contained')
+    }
+  } catch (error) {
+    // Send error status
+    res.status('200')
+    res.set({
+      'content-type': 'text/xml',
+      'db': 'close'
+    })
+    res.send('<?xml version="1.0" encoding="UTF-8" ?>\n' +
+        '<result>FAILURE: ' + error.message + '</result>\n' +
+        '<DAS></DAS>' +
+        '</xml>')
+  }
 })
 
 // Receives acquisuite log file uploads in XML format. Converts to JSON, then
@@ -167,7 +315,6 @@ router.post('/upload', xmlparser({
 }), function (req, res) {
     if (req.body.das && req.body.das.mode == 'LOGFILEUPLOAD') {
         var serial = req.body.das.serial
-        console.log(req.body)
         console.log('Received XML data from ' + serial + ' on: ' + new Date().toUTCString())
 
         // If multiple meters are connected, device is an array. Check for
