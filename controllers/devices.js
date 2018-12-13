@@ -5,6 +5,8 @@ const db = require('../db.js')
 const fs = require('fs')
 const AWS = require('aws-sdk')
 require('dotenv').config()
+const multer = require('multer')
+const upload = multer()
 AWS.config.update({region: 'us-west-2'})
 
 // Insert one point
@@ -151,6 +153,11 @@ var insertData = function insertData(device, serial) {
     }
   })
 }
+
+router.post('/test', upload.none(), function (req, res) {
+  console.log(JSON.stringify(req.body))
+  res.send()
+})
 
 // Receives acquisuite log file uploads in XML format. Converts to JSON, then
 // inserts into the temporary table on our MySQL database.
