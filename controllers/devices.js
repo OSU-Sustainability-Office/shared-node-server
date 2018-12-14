@@ -3,7 +3,7 @@
  * @Date:   2018-09-24T12:16:44-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-13T17:31:34-08:00
+ * @Last modified time: 2018-12-13T17:37:24-08:00
  */
 
 const express = require('express')
@@ -284,7 +284,7 @@ router.post('/test', upload.single('LOGFILE'), async function (req, res) {
           if (!checkTimeInterval(cols[0].toString())) {
             continue
           } else {
-            promises.push(populateDB(meterID, cols, req.body.MODBUSDEVICECLASS))
+            promises.push(populateDB(meterID, JSON.parse(JSON.stringify(cols)), req.body.MODBUSDEVICECLASS))
           }
         }
         await Promise.all(promises)
