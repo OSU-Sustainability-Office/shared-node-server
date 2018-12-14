@@ -3,7 +3,7 @@
  * @Date:   2018-09-24T12:16:44-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-13T16:24:35-08:00
+ * @Last modified time: 2018-12-13T16:33:15-08:00
  */
 
 const express = require('express')
@@ -251,10 +251,11 @@ async function populateDB (meterID, cols, deviceClass) {
 
   const map = meterdefinitions[deviceClass]
   if (!map) throw new Error('Device is not defined')
-
   for (let key of Object.keys(map)) {
-    pointMap[map[key]] = cols[key]
+    pointMap[map[key]] = cols[parseInt(key)]
   }
+  console.log(cols)
+  console.log(pointMap)
 
   checkAlerts(pointMap, meterID)
 
