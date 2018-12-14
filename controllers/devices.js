@@ -3,7 +3,7 @@
  * @Date:   2018-09-24T12:16:44-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-14T13:22:28-08:00
+ * @Last modified time: 2018-12-14T13:26:29-08:00
  */
 
 const express = require('express')
@@ -131,6 +131,9 @@ async function populateDB (meterID, cols, deviceClass) {
   const map = meterdefinitions[deviceClass]
 
   if (!map) throw new Error('Device is not defined')
+
+  // This keeps A8812 InternalI/O from populating blank lines in the data
+  if (Object.keys(map).length === 0) return Promise.resolve()
 
   // Map each value to the point Object
   // Map keys are the index of the col array parameter on which the
