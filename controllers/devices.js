@@ -3,7 +3,7 @@
  * @Date:   2018-09-24T12:16:44-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-13T17:43:34-08:00
+ * @Last modified time: 2018-12-13T17:48:03-08:00
  */
 
 const express = require('express')
@@ -177,7 +177,7 @@ async function getMeter (serial, device, name, deviceClass) {
 }
 
 function checkTimeInterval (time) {
-  console.log(parseInt(time.substring(14, 16)))
+  console.log(time.substring(15, 16))
   if (parseInt(time.substring(14, 16)) % 15 === 0) {
     return true
   } else {
