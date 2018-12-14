@@ -23,7 +23,7 @@ router.get('/download', function(req, res) {
 // Upload User Data
 router.post('/upload', function (req, res) {
 	let usr = req.body
-	usr.onid = usr.UserID
+	if (usr.UserID) usr.onid = usr.UserID // For compatibility with the old CC
 	delete usr['UserID']
 	db.updateUser(usr)
 	res.status(200).send('SCV good to go, sir.')
