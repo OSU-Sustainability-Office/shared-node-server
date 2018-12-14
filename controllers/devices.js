@@ -3,7 +3,7 @@
  * @Date:   2018-09-24T12:16:44-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-13T16:02:54-08:00
+ * @Last modified time: 2018-12-13T16:16:17-08:00
  */
 
 const express = require('express')
@@ -171,7 +171,7 @@ async function getMeter (serial, device, name, deviceClass) {
     let i = await db.query('INSERT INTO meters (name, address, class) VALUES (?, ?, ?)', [name, serial + '_' + device, deviceClass])
     r = i.insertId
   } else {
-    r = q[0]
+    r = q[0].id
   }
   return r
 }
