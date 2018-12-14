@@ -3,7 +3,7 @@
  * @Date:   2018-09-24T12:16:44-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-13T15:49:36-08:00
+ * @Last modified time: 2018-12-13T16:02:54-08:00
  */
 
 const express = require('express')
@@ -165,10 +165,10 @@ var insertData = function insertData(device, serial) {
 }
 
 async function getMeter (serial, device, name, deviceClass) {
-  let q = await db.query('SELECT id FROM meters WHERE address = ?', [serial + '-' + device])
+  let q = await db.query('SELECT id FROM meters WHERE address = ?', [serial + '_' + device])
   let r
   if (q.length === 0) {
-    let i = await db.query('INSERT INTO meters (name, address, class) VALUES (?, ?, ?)', [name, serial + '-' + device, deviceClass])
+    let i = await db.query('INSERT INTO meters (name, address, class) VALUES (?, ?, ?)', [name, serial + '_' + device, deviceClass])
     r = i.insertId
   } else {
     r = q[0]
@@ -278,7 +278,7 @@ router.post('/test', upload.single('LOGFILE'), async function (req, res) {
   }
   try {
     if (req.file && req.body.PASSWORD === process.env.ACQUISUITE_PASS) {
-      let meterID = await getMeter(req.body.SERIALNUMBER, req.body.MODBUSDEVICE)
+      let meterID = await getMeter(req.body.SERIALNUMBER, req.body.MODBUSDEVICE, req.body.MODBUSDEVICENAME, req.body.MODBUSDEVICECLASS)
       zlib.unzip(req.file.buffer, async (error, result) => {
         if (error) throw error
         const table = result.toString('ascii').split('\n')
