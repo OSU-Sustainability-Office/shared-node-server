@@ -3,7 +3,7 @@
  * @Date:   2018-09-24T12:16:44-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-13T17:51:57-08:00
+ * @Last modified time: 2018-12-13T17:58:53-08:00
  */
 
 const express = require('express')
@@ -213,7 +213,7 @@ async function checkAlerts (points, meterID) {
 
 async function populateDB (meterID, cols, deviceClass) {
   console.log(cols)
-  const timestamp = cols[0].toString().substring(0, 16) + ':00'
+  const timestamp = cols[0].toString().substring(1, 17) + ':00'
   console.log(timestamp)
   const pointMap = {
     accumulated_real: null,
