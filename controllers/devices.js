@@ -3,7 +3,7 @@
  * @Date:   2018-09-24T12:16:44-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-13T16:47:54-08:00
+ * @Last modified time: 2018-12-13T16:57:53-08:00
  */
 
 const express = require('express')
@@ -276,11 +276,10 @@ router.post('/test', upload.single('LOGFILE'), async function (req, res) {
       zlib.unzip(req.file.buffer, async (error, result) => {
         if (error) throw error
         const table = result.toString('ascii').split('\n')
-        console.log(table)
         let promises = []
         for (let entry of table) {
-          console.log(entry)
           let cols = entry.split(',')
+          console.log(cols)
           if (!checkTimeInterval(cols[0])) {
             continue
           } else {
