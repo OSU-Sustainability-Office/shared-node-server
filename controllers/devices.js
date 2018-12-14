@@ -3,7 +3,7 @@
  * @Date:   2018-09-24T12:16:44-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-13T17:11:28-08:00
+ * @Last modified time: 2018-12-13T17:24:39-08:00
  */
 
 const express = require('express')
@@ -211,8 +211,8 @@ async function checkAlerts (points, meterID) {
 }
 
 async function populateDB (meterID, cols, deviceClass) {
-  const timestamp = cols[0].toString().substring(0, 16) + ':00'
   console.log(cols)
+  const timestamp = cols[0].toString().substring(0, 16) + ':00'
   console.log(timestamp)
   const pointMap = {
     accumulated_real: null,
@@ -280,9 +280,11 @@ router.post('/test', upload.single('LOGFILE'), async function (req, res) {
         let promises = []
         for (let entry of table) {
           let cols = entry.split(',')
+          console.log(cols)
           if (!checkTimeInterval(cols[0].toString())) {
             continue
           } else {
+            console.log(cols)
             promises.push(populateDB(meterID, cols, req.body.MODBUSDEVICECLASS))
           }
         }
