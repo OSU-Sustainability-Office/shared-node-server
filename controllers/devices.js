@@ -3,7 +3,7 @@
  * @Date:   2018-09-24T12:16:44-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-13T16:16:17-08:00
+ * @Last modified time: 2018-12-13T16:24:35-08:00
  */
 
 const express = require('express')
@@ -264,15 +264,10 @@ async function populateDB (meterID, cols, deviceClass) {
 router.post('/test', upload.single('LOGFILE'), async function (req, res) {
   if (req.body.MODE !== 'LOGFILEUPLOAD') {
     res.status('200')
-    res.set({
-      'content-type': 'text/xml',
-      'db': 'close'
-    })
     res.send(
-      '<?xml version="1.0" encoding="UTF-8" ?>\n' +
-      '<result>SUCCESS</result>\n' +
-      '<DAS></DAS>' +
-      '</xml>'
+      '<pre>\n' +
+      'SUCCESS\n' +
+      '</pre>'
     )
     return
   }
@@ -293,15 +288,10 @@ router.post('/test', upload.single('LOGFILE'), async function (req, res) {
         }
         await Promise.all(promises)
         res.status('200')
-        res.set({
-          'content-type': 'text/xml',
-          'db': 'close'
-        })
         res.send(
-          '<?xml version="1.0" encoding="UTF-8" ?>\n' +
-          '<result>SUCCESS</result>\n' +
-          '<DAS></DAS>' +
-          '</xml>'
+          '<pre>\n' +
+          'SUCCESS\n' +
+          '</pre>'
         )
       })
     } else {
@@ -309,15 +299,10 @@ router.post('/test', upload.single('LOGFILE'), async function (req, res) {
     }
   } catch (error) {
     // Send error status
-    res.status('200')
-    res.set({
-      'content-type': 'text/xml',
-      'db': 'close'
-    })
-    res.send('<?xml version="1.0" encoding="UTF-8" ?>\n' +
-        '<result>FAILURE: ' + error.message + '</result>\n' +
-        '<DAS></DAS>' +
-        '</xml>')
+    res.status('406')
+    res.send('<pre>\n' +
+        'FAILURE: ' + error.message + '\n' +
+        '</pre>')
   }
 })
 
