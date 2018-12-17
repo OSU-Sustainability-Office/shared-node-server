@@ -3,7 +3,7 @@
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: ddb.js
  * @Last modified by:   jackrwoods
- * @Last modified time: 2018-12-17T15:26:36-08:00
+ * @Last modified time: 2018-12-17T15:35:14-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -78,7 +78,7 @@ exports.updateUser = function (usr) {
     // Iterate over the new data
     usr.data.forEach(function (data, index, dataArr) {
       // Search dataMap for the current data's date
-      let i = dataMap.find(data.date)
+      let i = dataMap.indexOf(data.date)
       // If the date is found, replace the data object with the most recent
       if (i > -1) dbUsr.data.splice(i, 1, dataArr[index])
       // Otherwise, add the data to the list
