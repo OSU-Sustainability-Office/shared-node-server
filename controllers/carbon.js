@@ -3,7 +3,7 @@
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: carbon.js
  * @Last modified by:   jackrwoods
- * @Last modified time: 2018-12-17T15:13:04-08:00
+ * @Last modified time: 2018-12-17T15:23:05-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -37,7 +37,7 @@ router.post('/upload', function (req, res) {
 		delete usr['UserID']
 	}
 	db.updateUser(usr)
-	res.status(200).send('SCV good to go, sir.' + JSON.stringify(usr))
+	res.status(200).send('SCV good to go, sir.')
 })
 
 // Carbon Calculator Question Retrieval
