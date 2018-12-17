@@ -1,3 +1,12 @@
+/**
+ * @Author: Jack Woods <jackrwoods>
+ * @Date:   2018-12-14T13:18:19-08:00
+ * @Filename: ddb.js
+ * @Last modified by:   jackrwoods
+ * @Last modified time: 2018-12-17T15:26:36-08:00
+ * @Copyright: 2018 Oregon State University
+ */
+
 // Initialize AWS SDK
 // On Linux, AWS loads user credentials from ~/.aws/credentials.
 // For more information, take a look at https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/loading-node-credentials-shared.html
@@ -71,7 +80,7 @@ exports.updateUser = function (usr) {
       // Search dataMap for the current data's date
       let i = dataMap.find(data.date)
       // If the date is found, replace the data object with the most recent
-      if (index > -1) dbUsr.data.splice(i, 1, dataArr[index])
+      if (i > -1) dbUsr.data.splice(i, 1, dataArr[index])
       // Otherwise, add the data to the list
       else dbUsr.data.push(dataArr[index])
 
