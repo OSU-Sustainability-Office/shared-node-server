@@ -3,7 +3,7 @@
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: carbon.js
  * @Last modified by:   Jack Woods
- * @Last modified time: 2018-12-18T09:55:41-08:00
+ * @Last modified time: 2018-12-18T12:07:21-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -22,7 +22,7 @@ router.use(function timeLog(req,res,next){
 // Download User Data
 router.get('/download', function(req, res) {
 	let usr = {
-		onid = req.session.UserID
+		onid: req.session.UserID
 	}
 	db.getUser(usr).then(data => {
 		res.status(200).send(data.data)
