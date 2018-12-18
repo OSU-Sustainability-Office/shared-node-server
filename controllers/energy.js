@@ -1,3 +1,11 @@
+/**
+ * @Author: Brogan Miner <Brogan>
+ * @Date:   2018-12-13T16:05:05-08:00
+ * @Email:  brogan.miner@oregonstate.edu
+ * @Last modified by:   Brogan
+ * @Last modified time: 2018-12-17T17:34:31-08:00
+ */
+
 const express = require('express')
 const router = express.Router()
 const db = require('../db.js')
@@ -59,22 +67,12 @@ router.get('/story', (req, res) => {
     let promises = []
     const id = req.queryInt('id')
     promises.push(db.query('SELECT * FROM stories WHERE id=?', [id]))
-    promises.push(db.query('SELECT * FROM blocks WHERE story_id=?', [id]))
+    promises.push(db.query('SELECT DATE_FORMAT(date_start, "%Y-%m-%dT%H:%i:00.000Z") AS date_start, DATE_FORMAT(date_end, "%Y-%m-%dT%H:%i:00.000Z") AS date_end, graph_type, story_id, id, name, date_interval, interval_unit FROM blocks WHERE story_id=?', [id]))
     promises.push(db.query('SELECT block_groups.* FROM (SELECT id FROM blocks WHERE story_id=?) AS block LEFT JOIN block_groups ON block.id = block_groups.block_id', [id]))
     promises.push(db.query('SELECT meter_group_relation.*, chart.chart_id, meters.type AS type, meters.negate AS negate FROM (SELECT block_groups.group_id as id, block_groups.id AS chart_id FROM (SELECT id FROM blocks WHERE story_id=?) AS block LEFT JOIN block_groups ON block.id = block_groups.block_id) AS chart LEFT JOIN meter_group_relation ON meter_group_relation.group_id = chart.id JOIN meters ON meter_group_relation.meter_id = meters.id', [id]))
     Promise.all(promises).then(r => {
       let rObj = r[0][0]
       rObj.blocks = r[1]
-      // Fix for wrong timezone should not be for loop....
-      // for (let b of rObj.blocks) {
-      //   let ds = new Date(b.date_start)
-      //   // ds.setTime(ds.getTime() - ds.getTimezoneOffset() * 60 * 1000)
-      //   b.date_start = ds.toISOString()
-      //
-      //   let de = new Date(b.date_end)
-      //   // de.setTime(de.getTime() - de.getTimezoneOffset() * 60 * 1000)
-      //   b.date_end = de.toISOString()
-      // }
       rObj.openCharts = r[2]
       rObj.openMeters = r[3]
       res.send(JSON.stringify(rObj))
@@ -242,7 +240,7 @@ router.get('/map', function (req, res) {
 
 // BUILDINGS
 router.get('/buildings', function (req, res) {
-  db.query('SELECT id, name FROM meter_groups WHERE is_building=1').then(rows => {
+  db.query('SELECT id, name FROM meter_groups WHERE is_building=1 ORDER BY NAME ASC').then(rows => {
     res.send(rows)
   }).catch(err => {
     res.status(400).send('400: ' + err.message)
@@ -265,7 +263,7 @@ router.get('/stories', (req, res) => {
 router.get('/data', (req, res) => {
   if (req.queryString('startDate') && req.queryString('endDate') && req.queryInt('id') && req.queryString('point')) {
     console.log(req.queryString('startDate'))
-    let q = 'SELECT time, ' + req.queryString('point') + ' FROM data WHERE time >= ? AND time <= ? AND meter_id = ? and (accumulated_real is not null or total is not null or cubic_feet is not null)  ORDER BY TIME ASC'
+    let q = 'SELECT DATE_FORMAT(time, "%Y-%m-%dT%H:%i:00.000Z") AS time, ' + req.queryString('point') + ' FROM data WHERE time >= ? AND time <= ? AND meter_id = ? and (accumulated_real is not null or total is not null or cubic_feet is not null) ORDER BY TIME ASC'
     db.query(q, [req.queryString('startDate'), req.queryString('endDate'), req.queryInt('id')]).then(rows => {
       res.send(JSON.stringify(rows))
     }).catch(e => {
