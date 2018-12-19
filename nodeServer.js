@@ -1,3 +1,11 @@
+/**
+ * @Author: Brogan Miner <Brogan>
+ * @Date:   2018-09-28T10:43:29-07:00
+ * @Email:  brogan.miner@oregonstate.edu
+ * @Last modified by:   Brogan
+ * @Last modified time: 2018-12-19T15:52:20-08:00
+ */
+
 // Load Amazon RDS credentials from .env file
 require('dotenv').config()
 
@@ -11,61 +19,80 @@ const db = require('./db') // Database                  // this command: sudo ip
 const bodyParser = require('body-parser')
 const DynamoDBStore = require('dynamodb-store')
 
-// Allow cross-origin resource sharing
-app.use(cors({origin: true, credentials: true}))
+let server = null
 
-// log every request to the console
-app.use(morgan('dev'))
+exports.start = function (cb) {
+  // Allow cross-origin resource sharing
+  app.use(cors({origin: true, credentials: true}))
 
-// Initialize body parser to parse post bodies into useful JSON
-app.use(bodyParser.urlencoded({
-  extended: true
-}))
+  // log every request to the console
+  app.use(morgan('dev'))
 
-// Parse post bodies
-app.use(bodyParser.json({limit: '50mb'})) // get information from JSON POST bodies
+  // Initialize body parser to parse post bodies into useful JSON
+  app.use(bodyParser.urlencoded({
+    extended: true
+  }))
 
-// Set up session store
-var storeOptions = {
-  'dynamoConfig': {
-    'accessKeyId': process.env.AWS_ACCESS_KEY_ID,
-    'secretAccessKey': process.env.AWS_SECRET_ACCESS_KEY,
-    'region': 'us-west-2',
-    'endpoint': 'http://dynamodb.us-west-2.amazonaws.com',
-    'dynamodb_store_debug': true
-  },
-  'keepExpired': false,
-  'touchInterval': 30000,
-  'ttl': 600000
+  // Parse post bodies
+  app.use(bodyParser.json({limit: '50mb'})) // get information from JSON POST bodies
+
+  // Set up session store
+  var storeOptions = {
+    'dynamoConfig': {
+      'accessKeyId': process.env.AWS_ACCESS_KEY_ID,
+      'secretAccessKey': process.env.AWS_SECRET_ACCESS_KEY,
+      'region': 'us-west-2',
+      'endpoint': 'http://dynamodb.us-west-2.amazonaws.com',
+      'dynamodb_store_debug': true
+    },
+    'keepExpired': false,
+    'touchInterval': 30000,
+    'ttl': 600000
+  }
+
+  // Set up user sessions
+  app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: new DynamoDBStore(storeOptions)
+  }))
+
+  // User Authentication
+  app.use('/auth', require('./controllers/auth.js'))
+
+  // Carbon-Calculator Application
+  app.use('/carbon', require('./controllers/carbon.js'))
+
+  // Energy dashboard data uploads
+  app.use('/devices', require('./controllers/devices.js'))
+
+  // Energy Dashboard API
+  app.use('/energy', require('./controllers/energy.js'))
+
+  // Connect to DB
+  db.connect(function (err, connection) {
+    if (err) {
+      throw err
+    }
+    // Start the server
+    server = app.listen(port, function () {
+      console.log('Server listening on port:', port)
+      if (cb) { cb() }
+    })
+  })
 }
 
-// Set up user sessions
-app.use(session({
-  secret: process.env.SECRET,
-  resave: false,
-  saveUninitialized: false,
-  store: new DynamoDBStore(storeOptions)
-}))
-
-// User Authentication
-app.use('/auth', require('./controllers/auth.js'))
-
-// Carbon-Calculator Application
-app.use('/carbon', require('./controllers/carbon.js'))
-
-// Energy dashboard data uploads
-app.use('/devices', require('./controllers/devices.js'))
-
-// Energy Dashboard API
-app.use('/energy', require('./controllers/energy.js'))
-
-// Connect to DB
-db.connect(function (err, connection) {
-  if (err) {
-    throw err
+exports.close = function (cb) {
+  if (server) {
+    if (cb) {
+      server.close(() => { cb() })
+    } else {
+      server.close()
+    }
   }
-  // Start the server
-  app.listen(port, function () {
-    console.log('Server listening on port:', port)
-  })
-})
+}
+
+if (module.id === require.main.id) {
+  exports.start()
+}
