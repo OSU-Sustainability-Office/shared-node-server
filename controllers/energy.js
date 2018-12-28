@@ -3,7 +3,7 @@
  * @Date:   2018-12-13T16:05:05-08:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-17T17:34:31-08:00
+ * @Last modified time: 2018-12-27T11:25:28-08:00
  */
 
 const express = require('express')
@@ -321,7 +321,7 @@ router.get('/alerts', function (req, res) {
     res.status(403).send('403: NOT LOGGED IN')
   }
 })
-
+// ALERTS
 router.post('/alert', function (req, res) {
   if (req.session.user && req.session.user.id && req.session.user.privilege >= 2) {
     db.query('INSERT INTO alerts (user_id, meter_id, point, threshold) VALUES (?, ?, ?, ?)', [req.session.user.id, req.bodyString('meter_id'), req.bodyString('point'), req.bodyInt('threshold')]).then(r => {
@@ -355,6 +355,23 @@ router.delete('/alert', function (req, res) {
     })
   } else {
     res.status(403).send('403: NOT AUTHORIZED')
+  }
+})
+
+// CAMPAIGNS
+router.get('/campaign', function (req, res) {
+  if (req.queryInt('id')) {
+    let concurrentQuery = []
+    concurrentQuery.push(db.query('SELECT * FROM campaigns WHERE id = ?', [req.queryInt('id')]))
+    concurrentQuery.push(db.query('SELECT campaign_groups.group_id AS id, campaign_groups.goal AS goal, meter_groups.name AS name FROM campaign_groups JOIN meter_groups ON campaign_groups.group_id = meter_groups.id WHERE campaign_groups.campaign_id = ?', [req.queryInt('id')]))
+    Promise.all(concurrentQuery).then(r => {
+      const returnedCampaign = { ...r[0][0], groups: r[1] }
+      res.send(JSON.stringify(returnedCampaign))
+    }).catch(e => {
+      res.status(400).send('400: ' + e.message)
+    })
+  } else {
+    res.status(400).send('400: NO ID')
   }
 })
 // Photos

@@ -295,7 +295,7 @@ The Energy Dashboard API offers an extensive list of operations to perform the n
           ```
           403: NOT AUTHORIZED
           ```
-          
+        
 #### /energy/block
 #### /energy/chart
 #### /energy/user
