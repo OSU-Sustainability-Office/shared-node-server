@@ -4,7 +4,7 @@
   "description": "This server allows all of our web apps to access MongoDB through Ajax requests.",
   "main": "nodeServer.js",
   "scripts": {
-    "start": "nodemon ./nodeServer.js",
+    "start": "nodemon --max-old-space-size=700 ./nodeServer.js",
     "test": "mocha tests/index.js --exit"
   },
   "repository": {
