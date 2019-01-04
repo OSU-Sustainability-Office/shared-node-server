@@ -1,4 +1,7 @@
 # Shared Node Server
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/OSU-Sustainability-Office/shared-node-server.svg)](https://greenkeeper.io/)
+
 This server allows all of our web apps to interact with one unified users database using simple AJAX requests.
 
 ## API Documentation
