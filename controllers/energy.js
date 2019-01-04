@@ -3,7 +3,7 @@
  * @Date:   2018-12-13T16:05:05-08:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-27T11:25:28-08:00
+ * @Last modified time: 2019-01-04T12:08:09-08:00
  */
 
 const express = require('express')
@@ -207,7 +207,7 @@ router.delete('/chart', function (req, res) {
 // Current user info
 router.get('/user', function (req, res) {
   if (req.session.user) {
-    res.send(JSON.stringify({ name: req.session.user.name, privilege: req.session.user.privilige, id: req.session.user.id }))
+    res.send(JSON.stringify({ name: req.session.user.name, privilege: req.session.user.privilege, id: req.session.user.id }))
   } else if (req.session.UserID) {
     db.query('SELECT * from users WHERE name=?', [req.session.UserID]).then(r => {
       if (r.length <= 0) {
