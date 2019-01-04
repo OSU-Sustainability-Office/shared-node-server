@@ -3,7 +3,7 @@
  * @Date:   2018-09-28T10:43:29-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2018-12-19T15:52:20-08:00
+ * @Last modified time: 2019-01-04T09:08:57-08:00
  */
 
 // Load Amazon RDS credentials from .env file
@@ -96,3 +96,8 @@ exports.close = function (cb) {
 if (module.id === require.main.id) {
   exports.start()
 }
+
+process.on('uncaughtException', function (exception) {
+  console.log(exception)
+  // Server crashes after about a day, need to see why.
+})
