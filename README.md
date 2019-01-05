@@ -1,6 +1,7 @@
 # Shared Node Server
 [![Build Status](https://travis-ci.com/OSU-Sustainability-Office/shared-node-server.svg?branch=master)](https://travis-ci.com/OSU-Sustainability-Office/shared-node-server)
 [![Greenkeeper badge](https://badges.greenkeeper.io/OSU-Sustainability-Office/shared-node-server.svg)](https://greenkeeper.io/)
+[![Server Health](https://api.sustainability.oregonstate.edu/lambda/health)]()
 
 This server allows all of our web apps to interact with one unified users database using simple AJAX requests.
 
