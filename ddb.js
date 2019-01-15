@@ -3,7 +3,7 @@
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: ddb.js
  * @Last modified by:   Jack Woods
- * @Last modified time: 2019-01-15T11:40:01-08:00
+ * @Last modified time: 2019-01-15T11:47:05-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -103,19 +103,25 @@ exports.removeData = function (onid, qid) {
   const params = {
     'TableName': 'users',
     'Key': {
-      'onid': onid
+      'onid': ':onid'
     },
     'KeyConditionExpression': 'onid = :onid',
     'ExpressionAttributeValues': {
-      ':onid': onid
+      ':onid': onid,
+      ':qid': qid
     },
-    'UpdateExpression': 'REMOVE data[' + qid + ']'
+    'UpdateExpression': 'REMOVE data[:qid]'
   }
 
   // Run query
   return new Promise((resolve, reject) => {
     state.ddb.query(params, function (err, data) {
-      if (err) { return reject(err) }
+      if (err) {
+        err.onid = onid
+        err.qid = qid
+        err.params = params
+        return reject(err)
+      }
       resolve(data)
     })
   })
