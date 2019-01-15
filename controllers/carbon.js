@@ -3,7 +3,7 @@
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: carbon.js
  * @Last modified by:   Jack Woods
- * @Last modified time: 2019-01-15T11:45:00-08:00
+ * @Last modified time: 2019-01-15T11:53:55-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -43,9 +43,11 @@ router.post('/upload', function (req, res) {
 // Deletes one historical data point, specified by id
 router.get('/delete/:id', function (req, res) {
 	// The id specified in this route is the index of the data point in the user's data array.
-	db.removeData(req.session.UserID, req.params.id).then(result => {
+	let id = req.session.UserID
+	db.removeData(id, req.params.id).then(result => {
 		res.status(200).send('Orders, Cap\'n?' + result)
 	}).catch(err => {
+		err.id = id
 		res.status(500).send(err)
 	})
 })
