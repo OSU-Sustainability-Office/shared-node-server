@@ -3,7 +3,7 @@
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: ddb.js
  * @Last modified by:   Jack Woods
- * @Last modified time: 2019-01-15T11:27:02-08:00
+ * @Last modified time: 2019-01-15T11:30:50-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -105,6 +105,7 @@ exports.removeData = function (UserID, qid) {
     'Key': {
       'onid': UserID
     },
+    'KeyConditionExpression': 'onid = ' + UserID,
     'UpdateExpression': 'REMOVE data[' + qid + ']'
   }
 
