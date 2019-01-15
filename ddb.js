@@ -3,7 +3,7 @@
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: ddb.js
  * @Last modified by:   Jack Woods
- * @Last modified time: 2019-01-15T12:46:40-08:00
+ * @Last modified time: 2019-01-15T12:54:28-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -109,17 +109,14 @@ exports.removeData = function (onid, did) {
     'ExpressionAttributeValues': {
       ':onid': onid
     },
-    'UpdateExpression': 'Remove data['+did+']',
-    'ReturnValues': 'UPDATED_NEW'
+    'UpdateExpression': 'REMOVE data['+ did +']',
+    'ReturnValues': 'ALL_NEW'
   }
 
   // Run query
   return new Promise((resolve, reject) => {
     state.ddb.updateItem(params, function (err, data) {
-      if (err) {
-        return reject(err)
-      }
-      data.params = params
+      if (err) return reject(err)
       resolve(data)
     })
   })
