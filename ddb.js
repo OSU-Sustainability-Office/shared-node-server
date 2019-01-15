@@ -2,8 +2,8 @@
  * @Author: Jack Woods <jackrwoods>
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: ddb.js
- * @Last modified by:   jackrwoods
- * @Last modified time: 2018-12-17T15:35:14-08:00
+ * @Last modified by:   Jack Woods
+ * @Last modified time: 2019-01-15T10:48:42-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -93,6 +93,15 @@ exports.updateUser = function (usr) {
     // User does not exist.
     // The user's ddb item will be created
     putUser(usr).catch((rej) => {
+      console.log(rej)
+    })
+  })
+}
+
+exports.removeData = function (UserID, qid) {
+  this.getUser(UserID).then(dbUsr => {
+    dbUsr.data.splice(qid, 1) // Remove element from the data array
+    putUser(dbUsr).catch(rej => {
       console.log(rej)
     })
   })
