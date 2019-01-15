@@ -3,7 +3,7 @@
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: ddb.js
  * @Last modified by:   Jack Woods
- * @Last modified time: 2019-01-15T12:13:52-08:00
+ * @Last modified time: 2019-01-15T12:20:53-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -109,7 +109,8 @@ exports.removeData = function (onid, did) {
     'ExpressionAttributeValues': {
       ':onid': onid
     },
-    'UpdateExpression': 'REMOVE data['+did+']'
+    'UpdateExpression': 'REMOVE data['+did+']',
+    'ReturnValues': 'UPDATED_NEW'
   }
 
   // Run query
