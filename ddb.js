@@ -3,7 +3,7 @@
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: ddb.js
  * @Last modified by:   Jack Woods
- * @Last modified time: 2019-01-15T11:12:08-08:00
+ * @Last modified time: 2019-01-15T11:18:47-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -102,7 +102,10 @@ exports.removeData = function (UserID, qid) {
   // AWS SDK DDB Query Parameters - https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html
   const params = {
     'TableName': 'users',
-    'Key': UserID,
+    'KeyConditionExpression': 'onid = :UserID',
+    'ExpressionAttributeValues': {
+      ':UserID': UserID
+    }
     'UpdateExpression': 'REMOVE data[' + qid + ']'
   }
 
