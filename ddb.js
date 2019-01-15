@@ -3,7 +3,7 @@
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: ddb.js
  * @Last modified by:   Jack Woods
- * @Last modified time: 2019-01-15T13:01:43-08:00
+ * @Last modified time: 2019-01-15T13:07:57-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -114,7 +114,7 @@ exports.removeData = function (onid, did) {
 
   // Run query
   return new Promise((resolve, reject) => {
-    state.ddb.updateItem(params, function (err, data) {
+    state.ddb.update(params, function (err, data) {
       if (err) {
         return reject(err)
       }
