@@ -3,7 +3,7 @@
  * @Date:   2018-12-13T16:05:05-08:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2019-01-04T12:08:09-08:00
+ * @Last modified time: 2019-01-23T10:14:40-08:00
  */
 
 const express = require('express')
@@ -262,7 +262,6 @@ router.get('/stories', (req, res) => {
 // METERS AND DATA
 router.get('/data', (req, res) => {
   if (req.queryString('startDate') && req.queryString('endDate') && req.queryInt('id') && req.queryString('point')) {
-    console.log(req.queryString('startDate'))
     let q = 'SELECT DATE_FORMAT(time, "%Y-%m-%dT%H:%i:00.000Z") AS time, ' + req.queryString('point') + ' FROM data WHERE time >= ? AND time <= ? AND meter_id = ? and (accumulated_real is not null or total is not null or cubic_feet is not null) ORDER BY TIME ASC'
     db.query(q, [req.queryString('startDate'), req.queryString('endDate'), req.queryInt('id')]).then(rows => {
       res.send(JSON.stringify(rows))
@@ -362,7 +361,7 @@ router.delete('/alert', function (req, res) {
 router.get('/campaign', function (req, res) {
   if (req.queryInt('id')) {
     let concurrentQuery = []
-    concurrentQuery.push(db.query('SELECT * FROM campaigns WHERE id = ?', [req.queryInt('id')]))
+    concurrentQuery.push(db.query('SELECT DATE_FORMAT(date_start, "%Y-%m-%dT%H:%i:00.000Z") AS date_start, DATE_FORMAT(date_end, "%Y-%m-%dT%H:%i:00.000Z") AS date_end, DATE_FORMAT(compare_start, "%Y-%m-%dT%H:%i:00.000Z") AS compare_start, DATE_FORMAT(compare_end, "%Y-%m-%dT%H:%i:00.000Z") AS compare_end, name, id, media FROM campaigns WHERE id = ?', [req.queryInt('id')]))
     concurrentQuery.push(db.query('SELECT campaign_groups.group_id AS id, campaign_groups.goal AS goal, meter_groups.name AS name FROM campaign_groups JOIN meter_groups ON campaign_groups.group_id = meter_groups.id WHERE campaign_groups.campaign_id = ?', [req.queryInt('id')]))
     Promise.all(concurrentQuery).then(r => {
       const returnedCampaign = { ...r[0][0], groups: r[1] }
