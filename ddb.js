@@ -2,8 +2,8 @@
  * @Author: Jack Woods <jackrwoods>
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: ddb.js
- * @Last modified by:   jackrwoods
- * @Last modified time: 2018-12-17T15:35:14-08:00
+ * @Last modified by:   Jack Woods
+ * @Last modified time: 2019-01-15T13:28:08-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -94,6 +94,31 @@ exports.updateUser = function (usr) {
     // The user's ddb item will be created
     putUser(usr).catch((rej) => {
       console.log(rej)
+    })
+  })
+}
+
+exports.removeData = function (onid, did) {
+  // AWS SDK DDB Query Parameters - https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html
+  const params = {
+    'TableName': 'users',
+    'Key': {
+      'onid': onid
+    },
+    'ExpressionAttributeNames': {
+      '#attribute': 'data'
+    },
+    'UpdateExpression': 'REMOVE #attribute['+ did +']',
+    'ReturnValue': 'UPDATED_NEW'
+  }
+
+  // Run query
+  return new Promise((resolve, reject) => {
+    state.ddb.update(params, function (err, data) {
+      if (err) {
+        return reject(err)
+      }
+      resolve(data)
     })
   })
 }

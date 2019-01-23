@@ -3,7 +3,7 @@
  * @Date:   2018-12-14T13:18:19-08:00
  * @Filename: carbon.js
  * @Last modified by:   Jack Woods
- * @Last modified time: 2018-12-19T08:41:11-08:00
+ * @Last modified time: 2019-01-15T12:50:45-08:00
  * @Copyright: 2018 Oregon State University
  */
 
@@ -38,6 +38,16 @@ router.post('/upload', function (req, res) {
 	}
 	db.updateUser(usr)
 	res.status(200).send('SCV good to go, sir.')
+})
+
+// Deletes one historical data point, specified by id
+router.get('/delete/:id', function (req, res) {
+	// The id specified in this route is the index of the data point in the user's data array.
+	db.removeData(req.session.UserID, req.params.id).then(result => {
+		res.status(200).send(result)
+	}).catch(err => {
+		res.status(500).send(err)
+	})
 })
 
 // Carbon Calculator Question Retrieval
