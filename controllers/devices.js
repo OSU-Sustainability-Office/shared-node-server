@@ -3,7 +3,7 @@
  * @Date:   2018-09-24T12:16:44-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2019-01-31T14:46:28-08:00
+ * @Last modified time: 2019-01-31T18:48:14-08:00
  */
 
 const express = require('express')
@@ -147,7 +147,7 @@ async function populateDB (meterID, cols, deviceClass) {
   // Once the points are mapped we can check if we should email any users
   checkAlerts(pointMap, meterID)
   if (!pointMap.accumulated_real && !pointMap.total && !pointMap.cubic_feet) {
-    Promise.resolve()
+    Promise.reject(new Error('No data'))
   }
   // Insert the mapped points into the data DB table
   try {
