@@ -3,7 +3,7 @@
  * @Date:   2018-12-13T16:05:05-08:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2019-01-23T10:14:40-08:00
+ * @Last modified time: 2019-02-11T12:00:00-08:00
  */
 
 const express = require('express')
@@ -373,6 +373,15 @@ router.get('/campaign', function (req, res) {
     res.status(400).send('400: NO ID')
   }
 })
+
+router.get('/campaigns', function (req, res) {
+  db.query('SELECT * FROM campaigns').then(r => {
+    res.send(JSON.stringify(r))
+  }).catch(e => {
+    res.status(400).send('400: ' + e.message)
+  })
+})
+
 // Photos
 router.get('/media', function (req, res) {
   fs.readdir('data/energydashboard/images/', (e, files) => {
@@ -383,6 +392,32 @@ router.get('/media', function (req, res) {
     } else { res.status(400).send('400: ' + e.message) }
   })
 })
+
+router.use('/images', express.static('data/energydashboard/uploads/'))
 router.use('/images', express.static('data/energydashboard/images/'))
+
+// ADMIN TOOLS
+router.get('/allusers', function (req, res) {
+  if (req.session.user.privilege >= 5) {
+    db.query('SELECT * FROM users').then(r => {
+      res.send(JSON.stringify(r))
+    }).catch(e => {
+      res.status(400).send('400: ' + e.message)
+    })
+  } else {
+    res.status(403).send('403: NOT AUTHORIZED')
+  }
+})
+router.put('/user', function (req, res) {
+  if (req.session.user.privilege >= 5) {
+    db.query('UPDATE users SET privilege = ? WHERE id = ?', [req.bodyInt('privilege'), req.bodyInt('id')]).then(() => {
+      res.status(204).send()
+    }).catch(e => {
+      res.status(400).send('400: ' + e.message)
+    })
+  } else {
+    res.status(403).send('403: NOT AUTHORIZED')
+  }
+})
 
 module.exports = router
