@@ -5,7 +5,6 @@
   "main": "nodeServer.js",
   "scripts": {
     "start": "nodemon --max-old-space-size=700 ./nodeServer.js",
-    "test": "mocha tests/index.js --exit"
   },
   "repository": {
     "type": "git",
