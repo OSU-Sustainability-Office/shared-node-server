@@ -3,7 +3,7 @@
  * @Date:   2018-12-13T16:05:05-08:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2019-02-11T12:00:00-08:00
+ * @Last modified time: 2019-02-24T12:43:13-08:00
  */
 
 const express = require('express')
@@ -11,6 +11,7 @@ const router = express.Router()
 const db = require('../db.js')
 const fs = require('fs')
 const mapData = require('../data/energydashboard/buildings.json')
+const meterdefinitions = require('../data/meterdefinitions/all.js')
 
 router.use(require('sanitize').middleware)
 
@@ -295,14 +296,8 @@ router.get('/metersbybuilding', function (req, res) {
 
 router.get('/meterPoints', function (req, res) {
   if (req.queryInt('id')) {
-    db.query('SELECT device_type FROM meters WHERE id = ?', [req.queryInt('id')]).then(r => {
-      fs.readFile('./data/meterdefinitions/' + r[0].device_type + '.json', (err, data) => {
-        if (err) {
-          res.status(400).send('400: ' + err.message)
-        } else {
-          res.send(JSON.stringify(Object.values(JSON.parse(data))))
-        }
-      })
+    db.query('SELECT class FROM meters WHERE id = ?', [req.queryInt('id')]).then(r => {
+      res.send(JSON.stringify(Object.values(meterdefinitions[r[0].class])))
     })
   } else {
     res.status(400).send('400: NO ID')
