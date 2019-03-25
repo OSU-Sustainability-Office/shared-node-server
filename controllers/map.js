@@ -1,39 +1,31 @@
-var express = require('express');
-var router = express.Router();
-var db = require('../db');
-var ObjectId = require('mongodb').ObjectId;
+/**
+ * @Author: Brogan Miner <Brogan>
+ * @Date:   2019-03-11T13:57:19-07:00
+ * @Email:  brogan.miner@oregonstate.edu
+ * @Last modified by:   Brogan
+ * @Last modified time: 2019-03-20T15:30:31-07:00
+ */
 
-router.use(function timeLog(req,res,next){
-	console.log('Time: ', Date.now());
-	next();
-});
+require('dotenv').config()
+const APIToken = require('./api.js')
+const axios = require('axios')
+const express = require('express')
+const router = express.Router()
+const db = require('../ddb.js')
+db.initialize()
 
+router.get('/buildings', async function (req, res) {
+  try {
+    const token = await APIToken()
+    const responseData = await axios('https://api.oregonstate.edu/v1/locations?type=building&page[size]=10000', { method: 'get', headers: { Authorization: 'Bearer ' + token } })
+    res.send(responseData.data)
+  } catch (e) {
+    res.send(e.message)
+  }
+})
 
-/*===========================================
-				GET Requests
- ============================================
-*/
-//Params: callback, buildingId
-//returns: JSON wrapped in callback
-//Gets full featureObject with associated id
-router.get('/buildingId',function (req,res) {
-	var features = db.get("map").collection('featureCollection');
-	features.find(ObjectId(req.query.buildingId)).toArray(
-		function (err,rslt) {
-			res.send(req.query.callback+"("+JSON.stringify(rslt)+")");
-		}
-	)
-});
-//params: callback
-//returns: JSON wrapped in callback
-//Gets all building names in database, excludes parking lots
-router.get('/buildingNames',function (req, res) {
-	var features = db.get("map").collection('featureCollection');
-	features.find({"attributes.name":{$exists:true},"attributes.type":{$ne : "parking"}},{"attributes.name":1}).toArray(
-		function (err,rslt) {
-			res.send(req.query.callback+"("+JSON.stringify(rslt)+")");
-	});
-	
-});
+router.get('/features', function (req, res) {
 
-module.exports = router;
+})
+
+module.exports = router

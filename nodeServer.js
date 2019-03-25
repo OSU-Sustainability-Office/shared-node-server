@@ -3,7 +3,7 @@
  * @Date:   2018-09-28T10:43:29-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2019-01-04T09:08:57-08:00
+ * @Last modified time: 2019-03-11T13:57:51-07:00
  */
 
 // Load Amazon RDS credentials from .env file
@@ -69,6 +69,9 @@ exports.start = function (cb) {
 
   // Energy Dashboard API
   app.use('/energy', require('./controllers/energy.js'))
+
+  // Maps API
+  app.use('/map', require('./controllers/map.js'))
 
   // Connect to DB
   db.connect(function (err, connection) {

@@ -3,7 +3,7 @@
  * @Date:   2018-12-13T16:05:05-08:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2019-02-24T12:43:13-08:00
+ * @Last modified time: 2019-03-25T15:35:21-07:00
  */
 
 const express = require('express')
@@ -241,8 +241,16 @@ router.get('/map', function (req, res) {
 
 // BUILDINGS
 router.get('/buildings', function (req, res) {
-  db.query('SELECT id, name FROM meter_groups WHERE is_building=1 ORDER BY NAME ASC').then(rows => {
+  db.query('SELECT id, name, building_id, affiliation, story_id FROM meter_groups WHERE is_building=1 ORDER BY NAME ASC').then(rows => {
     res.send(rows)
+  }).catch(err => {
+    res.status(400).send('400: ' + err.message)
+  })
+})
+
+router.get('/buildingForStory', (req, res) => {
+  db.query('SELECT building_id FROM meter_groups WHERE story_id = ?', [req.queryInt('story')]).then(rows => {
+    res.send(JSON.stringify(rows[0]))
   }).catch(err => {
     res.status(400).send('400: ' + err.message)
   })
@@ -414,5 +422,15 @@ router.put('/user', function (req, res) {
     res.status(403).send('403: NOT AUTHORIZED')
   }
 })
-
+router.get('/allMeters', function (req, res) {
+  if (req.session.user.privilege >= 5) {
+    db.query('SELECT * FROM meters').then(rows => {
+      res.send(JSON.stringify(rows))
+    }).catch(e => {
+      res.status(400).send('400: ' + e.message)
+    })
+  } else {
+    res.status(403).send('403: NOT AUTHORIZED')
+  }
+})
 module.exports = router
