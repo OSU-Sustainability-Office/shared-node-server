@@ -3,7 +3,7 @@
  * @Date:   2019-03-11T13:57:19-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2019-03-26T12:01:53-07:00
+ * @Last modified time: 2019-03-28T18:08:35-07:00
  */
 
 require('dotenv').config()
@@ -13,12 +13,23 @@ const express = require('express')
 const router = express.Router()
 const db = require('../ddb.js')
 db.initialize()
+router.use(require('sanitize').middleware)
 
 router.get('/buildings', async (req, res) => {
   try {
     const token = await APIToken()
     const responseData = await axios('https://api.oregonstate.edu/v1/locations?type=building&page[size]=10000', { method: 'get', headers: { Authorization: 'Bearer ' + token } })
     res.send(responseData.data)
+  } catch (e) {
+    res.send(e.message)
+  }
+})
+
+router.get('/buildingImage', async (req, res) => {
+  try {
+    const token = await APIToken()
+    const responseData = await axios('https://api.oregonstate.edu/v1/locations/' + req.queryString('id'), { method: 'get', headers: { Authorization: 'Bearer ' + token } })
+    res.send(responseData.data.data.attributes.images[0])
   } catch (e) {
     res.send(e.message)
   }
