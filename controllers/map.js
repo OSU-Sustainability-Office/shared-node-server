@@ -3,7 +3,7 @@
  * @Date:   2019-03-11T13:57:19-07:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2019-03-28T18:08:35-07:00
+ * @Last modified time: 2019-03-29T12:39:42-07:00
  */
 
 require('dotenv').config()
@@ -44,6 +44,12 @@ router.get('/features', async (req, res) => {
   } catch (err) {
     res.satus(400).send(err.message)
   }
+})
+
+router.get('/services', async (req, res) => {
+  const token = await APIToken()
+  const responseData = await axios('https://api.oregonstate.edu/v1/locations?page[size]=10000', { method: 'get', headers: { Authorization: 'Bearer ' + token } })
+  res.send(responseData.data)
 })
 
 module.exports = router
