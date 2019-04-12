@@ -41,5 +41,9 @@
     "requestify": "^0.2.5",
     "sanitize": "^2.1.0",
     "xmlparser": "^0.1.0"
+  },
+  "devDependencies": {
+    "leaflet": "^1.4.0",
+    "leaflet-headless": "^0.2.6"
   }
 }

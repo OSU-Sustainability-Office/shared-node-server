@@ -1,0 +1,1727 @@
+[
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283109,
+        44.56655,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "In Ava's Cafe.",
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2836,
+        44.564039,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.280212,
+        44.56404,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.279052,
+        44.564977,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.27931,
+        44.565001,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "Next to Joe's Burgers and ATMs",
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.277454,
+        44.560702,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "Located in Beverage station",
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.276512,
+        44.564425,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "next to unisex restroom, room 143.",
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.275434,
+        44.563389,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "Near restrooms by rock wall.",
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.275555,
+        44.565325,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "In Java II",
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.272042,
+        44.563986,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.281032,
+        44.567029,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283703,
+        44.567136,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.278167,
+        44.567641,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.275941,
+        44.567622,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.274825,
+        44.565107,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.277486,
+        44.5649,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.278709,
+        44.560627,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.273935,
+        44.567121,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.285173,
+        44.566578,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.274251,
+        44.566097,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.279235,
+        44.564354,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bottle Refill Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.281638,
+        44.564667,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Eco2Go Return"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.279648,
+        44.566349,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Eco2Go Return"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.279701,
+        44.564652,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Eco2Go Return"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.279219,
+        44.563222,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Eco2Go Return"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.274831,
+        44.5644,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Eco2Go Return"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.276022,
+        44.565424,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Eco2Go Return"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.275131,
+        44.566838,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Eco2Go Return"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283601,
+        44.563872,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Gluten-Free"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283321,
+        44.564022,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Gluten-Free"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283306,
+        44.563934,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Gluten-Free"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.280145,
+        44.56402,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Gluten-Free"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.277665,
+        44.560772,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Gluten-Free"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.277611,
+        44.560772,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "global fare",
+      "Name": "Gluten-Free"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.279339,
+        44.564892,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Gluten-Free"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.27901,
+        44.564944,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Gluten-Free"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.278523,
+        44.564854,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Gluten-Free"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283136,
+        44.566512,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Gluten-Free"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.271887,
+        44.56414,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Gluten-Free"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.271919,
+        44.56396,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Gluten-Free"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.277683,
+        44.560771,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Halal"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.272152,
+        44.564175,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Halal"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.271981,
+        44.56396,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Halal"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2836,
+        44.564039,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "Calabaloo’s<br>Side grilled chicken breast: 2.65<br>Grilled pineapple:1.25",
+      "Name": "Make Cents"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.28333,
+        44.563965,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "Tomasitto’s<br>Seasonal vegetable: 1.00<br>Small pasta w/ sauce: 2.50<br>Vegetarian or meat pizza slice: 3.00<br>Whole fruit: .75",
+      "Name": "Make Cents"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283253,
+        44.563954,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "Serrano’s<br>Single taco: 2.00<br>Side quinoa, brown rice or cilantro rice: 1.00<br>Side pinto or black beans: 1.00",
+      "Name": "Make Cents"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.271965,
+        44.564058,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "Calabaloo’s<br>Side grilled chicken breast: 2.65<br>Grilled pineapple: 1.25",
+      "Name": "Make Cents"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.277674,
+        44.560775,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "Deli<br>½ sandwich: 3.10<br>Grilled cheese: 2.75",
+      "Name": "Make Cents"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2776,
+        44.560832,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "Pizza<br>Vegetarian or meat pizza slice: 3.00",
+      "Name": "Make Cents"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283352,
+        44.564023,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283643,
+        44.563875,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283329,
+        44.563937,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.280212,
+        44.56401,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.277591,
+        44.560783,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.277671,
+        44.560677,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.276379,
+        44.559948,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.278656,
+        44.564977,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.279339,
+        44.564904,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.278677,
+        44.567088,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.272195,
+        44.564172,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.271936,
+        44.56404,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.278346,
+        44.56503,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegan"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.280273,
+        44.564019,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283631,
+        44.564021,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283394,
+        44.564022,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "Vegetarian",
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283348,
+        44.563941,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.27845,
+        44.564853,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.279126,
+        44.564942,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.279325,
+        44.564891,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.277611,
+        44.560784,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.277749,
+        44.560677,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.283156,
+        44.566514,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.272081,
+        44.564177,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.271979,
+        44.564037,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.272159,
+        44.564024,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.27769,
+        44.560509,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Vegetarian"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.278575,
+        44.567146,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "A certified LEED Gold building with the following features: 16,500 gallon rainwater collection system, modular raised floor system that allows air to circulate eliminating the need for ceiling air ducts, systems designed to use ~50% less electricity and ~70% less water than required, and much more.",
+      "Name": "Kelley Engineering"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2734036,
+        44.564071,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "Located outside of Callahan Hall, the Food Forest is a small student-and-volunteer-run organic garden that provides teaching and volunteering opportunities, as well as supplying University Housing and Dining Services (UHDS) with some fresh, organic produce.",
+      "Name": "Food Forest"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2761395,
+        44.5602489,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "The ILLC is the equivalent of LEED Gold ratged and is the home of many innovative and sustainable features, as well as housing for international students.",
+      "Name": "International Living and Learning Center"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2944,
+        44.5665094,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": "A 1.435 megawatt array is located adjacent to the Campus Way bike path just west of OSU's farm services buildings. Sheep still graze this pasture, which now serves double duty providing electricity and grass. This installation produces enough electricity to power 167 homes for a year or offset CO2 emissions from 136,206 gallons of gasoline per year. This array is one of five large ground-mounted solar electric (photovoltaic) arrays installed on OSU land.",
+      "Name": "35th Street Solar Array"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2759786,
+        44.5643462,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bike Lockers"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2815254,
+        44.5585289,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bike Lockers"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2867289,
+        44.5667998,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bike Fix-it Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2781887,
+        44.5632531,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bike Fix-it Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2726741,
+        44.56362,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bike Fix-it Station"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2835424,
+        44.5661501,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Electric Vehicle Chargers"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2806134,
+        44.5651029,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Electric Vehicle Chargers"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2716012,
+        44.5638952,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Electric Vehicle Chargers"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2784784,
+        44.559989,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Electric Vehicle Chargers"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2811284,
+        44.5575351,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Electric Vehicle Chargers"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2860529,
+        44.5572981,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "OSU Sustainability Office"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2725132,
+        44.5611433,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Campus Recycling"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2819331,
+        44.5622823,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bioswale"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2750022,
+        44.5617243,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bioswale"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2850337,
+        44.5602566,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bioswale"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2920396,
+        44.5666164,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bioswale"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2901943,
+        44.5669145,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bioswale"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2870293,
+        44.5639487,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bioswale"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.285023,
+        44.5614185,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bioswale"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2814288,
+        44.5617778,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bioswale"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2831562,
+        44.5590717,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bioswale"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2807207,
+        44.5671209,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bioswale"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2758605,
+        44.5608681,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bioswale"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2755816,
+        44.5605394,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Bioswale"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2812572,
+        44.5606923,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Sewer Access Structure"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2780707,
+        44.5669374,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Rain Garden"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2801092,
+        44.566861,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Rain Garden"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2734895,
+        44.5669451,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Rain Garden"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2745731,
+        44.5603942,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Rain Garden"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2764184,
+        44.560463,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Rain Garden"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2882631,
+        44.5595533,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Rain Garden"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2883704,
+        44.5593851,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Green Roof"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2887244,
+        44.5642086,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Rain Collection"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2745731,
+        44.5610898,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Rain Collection"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "coordinates": [
+        -123.2788646,
+        44.5668381,
+        0
+      ],
+      "type": "Point"
+    },
+    "properties": {
+      "description": null,
+      "Name": "Rain Collection"
+    }
+  }
+]

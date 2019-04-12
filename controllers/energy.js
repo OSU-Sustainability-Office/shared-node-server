@@ -3,9 +3,9 @@
  * @Date:   2018-12-13T16:05:05-08:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2019-03-25T15:35:21-07:00
+ * @Last modified time: 2019-04-11T17:28:52-07:00
  */
-
+require('dotenv').config()
 const express = require('express')
 const router = express.Router()
 const db = require('../db.js')
@@ -398,6 +398,33 @@ router.get('/media', function (req, res) {
 
 router.use('/images', express.static('data/energydashboard/uploads/'))
 router.use('/images', express.static('data/energydashboard/images/'))
+router.use('/upload_oc_form', express.static('extra/oc_upload.html'))
+
+router.post('/oc_upload', async (req, res) => {
+  if (req.bodyString('pass') === process.env.OC_PASSWORD) {
+    let uploadData = req.bodyInt('cons')
+    let accumulator = uploadData
+    let start = (new Date()).setHours(1, 0, 0, 0)
+    let lastRead = await db.query('SELECT time, DATE_FORMAT(time, "%Y-%m-%dT%H:%i:00.000Z") AS timeString, accumulated_real FROM data WHERE meter_id = 68 ORDER BY time DESC LIMIT 1')
+    if (lastRead.length > 0 && lastRead[0].timeString === (new Date(start)).toISOString()) {
+      res.send('ERROR: Data has already been uploaded today')
+    } else {
+      accumulator += lastRead[0].accumulated_real
+      uploadData /= 96
+      for (let i = 0; i < 96; i++) {
+        await db.query('INSERT INTO data (time, meter_id, accumulated_real) VALUES (?, 68, ?)', [
+          (new Date(start)).toISOString(),
+          accumulator
+        ])
+        accumulator -= uploadData
+        start -= 900000
+      }
+      res.send('SUCCESS: Uploaded data')
+    }
+  } else {
+    res.send('ERROR: Could not upload, wrong password')
+  }
+})
 
 // ADMIN TOOLS
 router.get('/allusers', function (req, res) {
