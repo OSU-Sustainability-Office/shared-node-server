@@ -4,14 +4,78 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Upload Orchard Court Data</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+      td {
+        border: solid 1px black;
+        padding: 5px;
+        margin: 0;
+      }
+      tr {
+        margin: 0;
+        padding: 0;
+      }
+      table {
+        border-collapse: collapse;
+        margin: 0;
+        padding: 0;
+      }
+      th {
+        border: solid 1px black;
+        padding: 10px;
+        font-weight: bold;
+      }
+    </style>
+    <script>
+      function handleClick(event) {
+        var password = prompt('Enter Password:', ' ');
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4) {
+            alert(this.responseText);
+            location.reload();
+          }
+        };
+        var params = "date=" + document.getElementById('date').value + "&read=" + document.getElementById('read').value + "&password=" + password
+
+        xhttp.open("POST", "oc_upload", true);
+        xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhttp.send(params);
+      }
+    </script>
   </head>
   <body>
-    <form action='oc_upload' method='POST' target="_blank">
-      Consumption:<br>
-      <input type="text" name="cons" required><br>
-      Password:<br>
-      <input type="password" name="pass" required>
-      <input type="submit" value="Submit">
-    </form>
+    <table>
+      <tr>
+        <th>Date</th>
+        <th>Reading</th>
+        <th>Consumption</th>
+      </tr>
+      <% data.forEach((row, index) => {%>
+        <tr>
+          <td>
+            <%= row.time.toLocaleDateString()%>
+          </td>
+          <td>
+            <%= row.reading %>
+          </td>
+          <td>
+            <% if (index > 0) { %>
+              <%= Math.round((data[index].reading - data[index-1].reading) * 4800) %>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+      <tr>
+        <td>
+          <input type="text" name="date" id='date'><br>
+        </td>
+        <td>
+          <input type="text" name="read" id='read'><br>
+        </td>
+        <td>
+          <button onclick='handleClick(event);'>Submit</button>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>

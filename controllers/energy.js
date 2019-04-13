@@ -3,7 +3,7 @@
  * @Date:   2018-12-13T16:05:05-08:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2019-04-11T17:28:52-07:00
+ * @Last modified time: 2019-04-12T19:21:31-07:00
  */
 require('dotenv').config()
 const express = require('express')
@@ -12,6 +12,7 @@ const db = require('../db.js')
 const fs = require('fs')
 const mapData = require('../data/energydashboard/buildings.json')
 const meterdefinitions = require('../data/meterdefinitions/all.js')
+const _ = require('lodash')
 
 router.use(require('sanitize').middleware)
 
@@ -398,19 +399,31 @@ router.get('/media', function (req, res) {
 
 router.use('/images', express.static('data/energydashboard/uploads/'))
 router.use('/images', express.static('data/energydashboard/images/'))
-router.use('/upload_oc_form', express.static('extra/oc_upload.html'))
+router.get('/upload_oc_form', async (req, res) => {
+  let ctx = { data: await db.query('SELECT * FROM oc_readings') }
+  let t = _.template(fs.readFileSync(`extra/oc_upload.html`))(ctx)
+  res.send(t)
+})
 
 router.post('/oc_upload', async (req, res) => {
-  if (req.bodyString('pass') === process.env.OC_PASSWORD) {
-    let uploadData = req.bodyInt('cons')
-    let accumulator = uploadData
-    let start = (new Date()).setHours(1, 0, 0, 0)
+  if (req.bodyString('password') === process.env.OC_PASSWORD) {
+    let read = req.bodyInt('read')
+    let start = (new Date(req.bodyString('date'))).setHours(1, 0, 0, 0)
+
     let lastRead = await db.query('SELECT time, DATE_FORMAT(time, "%Y-%m-%dT%H:%i:00.000Z") AS timeString, accumulated_real FROM data WHERE meter_id = 68 ORDER BY time DESC LIMIT 1')
-    if (lastRead.length > 0 && lastRead[0].timeString === (new Date(start)).toISOString()) {
-      res.send('ERROR: Data has already been uploaded today')
+
+    let lastMesaure = await db.query('SELECT reading, time FROM oc_readings ORDER BY time DESC LIMIT 1')
+    let uploadData = Math.round((read - lastMesaure[0].reading) * 4800)
+    let accumulator = uploadData
+    if (lastRead.length > 0 && start - (new Date(lastRead[0].timeString)).getTime() !== 86400000) {
+      res.send('ERROR: Incorrect date, data must be uploaded in order one day at a time')
     } else {
       accumulator += lastRead[0].accumulated_real
       uploadData /= 96
+      await db.query('INSERT INTO oc_readings (time, reading) VALUES (?, ?)', [
+        (new Date(start)).toISOString(),
+        read
+      ])
       for (let i = 0; i < 96; i++) {
         await db.query('INSERT INTO data (time, meter_id, accumulated_real) VALUES (?, 68, ?)', [
           (new Date(start)).toISOString(),
