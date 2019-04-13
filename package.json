@@ -30,6 +30,7 @@
     "express-session": "^1.15.6",
     "express-xml-bodyparser": "^0.3.0",
     "httpreq": "^0.4.24",
+    "lodash": "^4.17.11",
     "mocha": "^5.2.0",
     "mongodb": "^3.1.10",
     "mongoose": "^5.1.1",

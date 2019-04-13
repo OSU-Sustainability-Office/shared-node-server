@@ -3,7 +3,7 @@
  * @Date:   2018-12-13T16:05:05-08:00
  * @Email:  brogan.miner@oregonstate.edu
  * @Last modified by:   Brogan
- * @Last modified time: 2019-04-12T19:21:31-07:00
+ * @Last modified time: 2019-04-12T19:29:51-07:00
  */
 require('dotenv').config()
 const express = require('express')
@@ -407,7 +407,7 @@ router.get('/upload_oc_form', async (req, res) => {
 
 router.post('/oc_upload', async (req, res) => {
   if (req.bodyString('password') === process.env.OC_PASSWORD) {
-    let read = req.bodyInt('read')
+    let read = req.bodyFloat('read')
     let start = (new Date(req.bodyString('date'))).setHours(1, 0, 0, 0)
 
     let lastRead = await db.query('SELECT time, DATE_FORMAT(time, "%Y-%m-%dT%H:%i:00.000Z") AS timeString, accumulated_real FROM data WHERE meter_id = 68 ORDER BY time DESC LIMIT 1')
