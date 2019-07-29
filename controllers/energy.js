@@ -71,7 +71,7 @@ router.get('/story', (req, res) => {
     promises.push(db.query('SELECT * FROM stories WHERE id=?', [id]))
     promises.push(db.query('SELECT DATE_FORMAT(date_start, "%Y-%m-%dT%H:%i:00.000Z") AS date_start, DATE_FORMAT(date_end, "%Y-%m-%dT%H:%i:00.000Z") AS date_end, graph_type, story_id, id, name, date_interval, interval_unit FROM blocks WHERE story_id=?', [id]))
     promises.push(db.query('SELECT block_groups.* FROM (SELECT id FROM blocks WHERE story_id=?) AS block LEFT JOIN block_groups ON block.id = block_groups.block_id', [id]))
-    promises.push(db.query('SELECT meter_group_relation.*, chart.chart_id, meters.type AS type, meters.negate AS negate FROM (SELECT block_groups.group_id as id, block_groups.id AS chart_id FROM (SELECT id FROM blocks WHERE story_id=?) AS block LEFT JOIN block_groups ON block.id = block_groups.block_id) AS chart LEFT JOIN meter_group_relation ON meter_group_relation.group_id = chart.id JOIN meters ON meter_group_relation.meter_id = meters.id', [id]))
+    promises.push(db.query('SELECT meter_group_relation.*, chart.chart_id, meters.type AS type, meters.negate AS negate, meters.class as class FROM (SELECT block_groups.group_id as id, block_groups.id AS chart_id FROM (SELECT id FROM blocks WHERE story_id=?) AS block LEFT JOIN block_groups ON block.id = block_groups.block_id) AS chart LEFT JOIN meter_group_relation ON meter_group_relation.group_id = chart.id JOIN meters ON meter_group_relation.meter_id = meters.id', [id]))
     Promise.all(promises).then(r => {
       let rObj = r[0][0]
       rObj.blocks = r[1]
