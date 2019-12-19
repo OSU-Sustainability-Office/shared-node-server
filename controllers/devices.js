@@ -87,7 +87,7 @@ async function checkAlerts (points, meterID) {
 async function populateDB (meterID, cols, deviceClass) {
   // Shave off any second values that are present on the time string
   const timestamp = cols[0].toString().substring(1, 17) + ':00'
-  const timeseconds = ((new Date(timestamp)).getTime() / 1000) - (Date.getTimezoneOffset() * 60 * 60)
+  const timeseconds = ((new Date(timestamp)).getTime() / 1000) - (Date.getTimezoneOffset() * 60)
 
   // Construct the object that gets mapped to the database
   // This used to make checking alert points easier, and for mapping
