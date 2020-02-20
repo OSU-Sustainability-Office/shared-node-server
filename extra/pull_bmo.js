@@ -57,8 +57,8 @@ async function download (mac, port, to, from) {
 async function populateDB (meterID, cols, deviceClass) {
   // console.log(cols)
   // Shave off any second values that are present on the time string
-  const timestamp = cols[0].toString().substring(1, 17) + ':00'
-  const timeseconds = ((new Date(timestamp)).getTime() / 1000) - ((new Date()).getTimezoneOffset() * 60)
+  const timestamp = cols[0] // .toString().substring(1, 17) + ':00'
+  // const timeseconds = ((new Date(timestamp)).getTime() / 1000) - ((new Date()).getTimezoneOffset() * 60)
 
   // Construct the object that gets mapped to the database
   // This used to make checking alert points easier, and for mapping
@@ -124,7 +124,7 @@ async function populateDB (meterID, cols, deviceClass) {
   }
   // Insert the mapped points into the data DB table
   try {
-    await db.query('INSERT INTO data (meter_id, time, accumulated_real, real_power, reactive_power, apparent_power, real_a, real_b, real_c, reactive_a, reactive_b, reactive_c, apparent_a, apparent_b, apparent_c, pf_a, pf_b, pf_c, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c, total, input, minimum, maximum, cubic_feet, instant, rate, time_seconds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [meterID, timestamp, pointMap.accumulated_real, pointMap.real_power, pointMap.reactive_power, pointMap.apparent_power, pointMap.real_a, pointMap.real_b, pointMap.real_c, pointMap.reactive_a, pointMap.reactive_b, pointMap.reactive_c, pointMap.apparent_a, pointMap.apparent_b, pointMap.apparent_c, pointMap.pf_a, pointMap.pf_b, pointMap.pf_c, pointMap.vphase_ab, pointMap.vphase_bc, pointMap.vphase_ac, pointMap.vphase_an, pointMap.vphase_bn, pointMap.vphase_cn, pointMap.cphase_a, pointMap.cphase_b, pointMap.cphase_c, pointMap.total, pointMap.input, pointMap.minimum, pointMap.maximum, pointMap.cubic_feet, pointMap.instant, pointMap.rate, timeseconds])
+    await db.query('INSERT INTO data_dl_bmo (meter_id, time, accumulated_real, real_power, reactive_power, apparent_power, real_a, real_b, real_c, reactive_a, reactive_b, reactive_c, apparent_a, apparent_b, apparent_c, pf_a, pf_b, pf_c, vphase_ab, vphase_bc, vphase_ac, vphase_an, vphase_bn, vphase_cn, cphase_a, cphase_b, cphase_c, total, input, minimum, maximum, cubic_feet, instant, rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [meterID, timestamp, pointMap.accumulated_real, pointMap.real_power, pointMap.reactive_power, pointMap.apparent_power, pointMap.real_a, pointMap.real_b, pointMap.real_c, pointMap.reactive_a, pointMap.reactive_b, pointMap.reactive_c, pointMap.apparent_a, pointMap.apparent_b, pointMap.apparent_c, pointMap.pf_a, pointMap.pf_b, pointMap.pf_c, pointMap.vphase_ab, pointMap.vphase_bc, pointMap.vphase_ac, pointMap.vphase_an, pointMap.vphase_bn, pointMap.vphase_cn, pointMap.cphase_a, pointMap.cphase_b, pointMap.cphase_c, pointMap.total, pointMap.input, pointMap.minimum, pointMap.maximum, pointMap.cubic_feet, pointMap.instant, pointMap.rate, timeseconds])
     Promise.resolve()
   } catch (error) {
     Promise.resolve()
@@ -144,43 +144,37 @@ db.connect(async () => {
         let int = new Date(from)
         // One week at a time?
         int.setDate(from.getDate() + 1)
+        let pr = download(
+          row.address.split('_')[0],
+          row.address.split('_')[1],
+          to.toISOString(),
+          from.toISOString()
+        )
+        pr.then(async entry => {
+          let data = Parse(entry.data, { columns: false })
+          let mq = await db.query('SELECT id, class FROM meters WHERE address = ?', [entry.address])
+          let meterId = mq[0].id
+          let meterClass = mq[0].class
+          if (!meterId) {
+            console.log('Cant find meter ' + entry.address)
+          }
+          for (let row in data) {
+            if (row > 0) {
+              console.log(' Inserting data ' + mq[0].id)
+              await populateDB(meterId, data[row], meterClass)
+            }
+          }
+        })
+        dlPromises.push(pr)
         if (int >= to) {
-          dlPromises.push(download(
-            row.address.split('_')[0],
-            row.address.split('_')[1],
-            to.toISOString(),
-            from.toISOString()
-          ))
           break
         } else {
-          dlPromises.push(download(
-            row.address.split('_')[0],
-            row.address.split('_')[1],
-            int.toISOString(),
-            from.toISOString()
-          ))
           from = int
         }
       }
     }
   }).on('end', async () => {
-    let qPromises = []
-    let d = await Promise.all(dlPromises)
-    for (let entry of d) {
-      let data = Parse(entry.data, { columns: false })
-      let mq = await db.query('SELECT id, class FROM meters WHERE address = ?', [entry.address])
-      let meterId = mq[0].id
-      let meterClass = mq[0].class
-      if (!meterId) {
-        console.log('Cant find meter ' + entry.address)
-      }
-      for (let row in data) {
-        if (row > 0) {
-          qPromises.push(populateDB(meterId, data[row], meterClass))
-        }
-      }
-    }
-    await Promise.all(qPromises)
+    await Promise.all(dlPromises)
     console.log('done')
     db.close()
   })
