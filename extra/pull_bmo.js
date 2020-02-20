@@ -120,7 +120,7 @@ async function populateDB (meterID, cols, deviceClass) {
   // Once the points are mapped we can check if we should email any users
   // checkAlerts(pointMap, meterID)
   if (!pointMap.accumulated_real && !pointMap.total && !pointMap.cubic_feet) {
-    console.log(cols)
+    // console.log(cols)
     Promise.reject(new Error('No data'))
   }
   // Insert the mapped points into the data DB table
@@ -135,7 +135,7 @@ async function populateDB (meterID, cols, deviceClass) {
 async function processCSV (datacsv) {
   let dlPromises = []
   for (let row of datacsv) {
-    if (row.address !== 'NULL' && row.meter_id === '71') {
+    if (row.address !== 'NULL') {
       let from = new Date(row.time_2)
       from.setMinutes(-from.getTimezoneOffset())
       let to = new Date(row.time_1)
@@ -144,12 +144,24 @@ async function processCSV (datacsv) {
         let int = new Date(from)
         // One week at a time?
         int.setDate(from.getDate() + 1)
-        let pr = download(
-          row.address.split('_')[0],
-          row.address.split('_')[1],
-          to.toISOString(),
-          from.toISOString()
-        )
+        let pr
+        if (int >= to) {
+          pr = download(
+            row.address.split('_')[0],
+            row.address.split('_')[1],
+            to.toISOString(),
+            from.toISOString()
+          )
+          break
+        } else {
+          pr = download(
+            row.address.split('_')[0],
+            row.address.split('_')[1],
+            to.toISOString(),
+            int.toISOString()
+          )
+          from = int
+        }
         pr.then(async entry => {
           let data = Parse(entry.data, { columns: false })
           let mq = await db.query('SELECT id, class FROM meters WHERE address = ?', [entry.address])
@@ -160,7 +172,7 @@ async function processCSV (datacsv) {
           }
           for (let row in data) {
             if (row > 0) {
-              console.log(' Inserting data ' + mq[0].id)
+              // console.log(' Inserting data ' + mq[0].id)
               await populateDB(meterId, data[row], meterClass)
             }
           }
@@ -169,11 +181,6 @@ async function processCSV (datacsv) {
         if (dlPromises.length === 5) {
           await Promise.all(dlPromises)
           dlPromises = []
-        }
-        if (int >= to) {
-          break
-        } else {
-          from = int
         }
       }
     }
