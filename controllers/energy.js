@@ -379,7 +379,7 @@ router.get('/campaign', function (req, res) {
 })
 
 router.get('/campaigns', function (req, res) {
-  db.query('SELECT * FROM campaigns').then(r => {
+  db.query('SELECT * FROM campaigns WHERE visible = 1').then(r => {
     res.send(JSON.stringify(r))
   }).catch(e => {
     res.status(400).send('400: ' + e.message)
